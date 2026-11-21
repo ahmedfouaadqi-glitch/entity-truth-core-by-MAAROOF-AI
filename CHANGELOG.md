@@ -11,6 +11,9 @@
 ## Unreleased — local agent and self-hosting milestone
 
 ### Scope and local scan window
+- Added local Arabic-Indic and Persian digit normalization, Arabic percent and numeric separators, diacritic/tatweel removal and carefully scoped alef normalization while preserving original candidate text.
+- Added candidate extraction for email, formatted or labelled telephone numbers, labelled addresses and labelled service lists; these are text candidates only and are not verified.
+- Updated the browser playground to localize candidate category labels in Arabic, Sorani Kurdish and English.
 
 - Locked the product boundary to local entity-profile preparation; external fact verification, crawling, source comparison, ranking/visibility measurement and MAAROOF AI production integration remain out of scope.
 - Added selectable 100-word, 500-word and full-text local scan windows; 100 words remains the default for backwards-compatible behavior.
