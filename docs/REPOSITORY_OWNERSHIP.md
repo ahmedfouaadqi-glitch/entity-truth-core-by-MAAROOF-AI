@@ -76,4 +76,10 @@ This allows the owner to publish and manage official version tags while preventi
 - [ ] A second trusted code owner is designated before Code Owner approval is made mandatory.
 - [ ] All rulesets verified as Active, not Disabled or Evaluate.
 
-Detailed local import instructions are in `docs/github-rulesets/README.md`. After importing, verify that both new rulesets appear in GitHub as Active and their targets and bypass lists match the JSON files. Until the remaining collaborator-permission, `main` and `v*` controls are verified, the repository must not be described as fully protected. The implementation pull request therefore remains Draft and unmerged.
+Detailed local import instructions are in `docs/github-rulesets/README.md`. After importing, verify that both new rulesets appear in GitHub as Active and their targets and bypass lists match the JSON files. ## Implementation status
+
+The initial implementation pull request [#1](https://github.com/ahmedfouaadqi-glitch/entity-truth-core-by-MAAROOF-AI/pull/1) was squash-merged into `main` as commit `4badd1c5ec2e533af11847547b0e532333987329`. Post-merge CI passed on Node.js 20 and 22. No GitHub Release, npm publication, or website deployment was created as part of that merge.
+
+The all-branches owner-control ruleset remains active. The separate `main` PR/CI ruleset and `v*` tag ruleset are not confirmed active until imported and verified in GitHub Settings.
+
+Until collaborator permissions and the remaining `main` and `v*` controls are verified, the repository must not be described as fully protected.
