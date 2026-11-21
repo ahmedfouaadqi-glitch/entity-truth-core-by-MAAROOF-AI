@@ -47,9 +47,9 @@ This roadmap supersedes the earlier proposal to implement an optional external-v
 
 ### 1.3 Test corpus
 
-- [ ] Add 30–50 curated, non-sensitive test cases across Arabic, Sorani Kurdish, English and mixed RTL/LTR input.
-- [ ] Cover empty and short text, punctuation, Unicode marks, mixed digits, token boundaries and large input.
-- [ ] Keep tests deterministic and independent of websites, APIs, models or live data.
+- [x] Add 30 curated, non-sensitive test cases across Arabic, Sorani Kurdish, English and mixed RTL/LTR input in `test/fixtures/entity-text-corpus.mjs`.
+- [x] Cover empty and short text, punctuation, Unicode marks, Arabic-Indic and Persian digits, RTL/LTR mixtures, token boundaries and full-text input.
+- [x] Keep tests deterministic and independent of websites, APIs, models or live data.
 
 **Acceptance:** selected-window behavior is stable; default behavior remains 100 words; all new patterns are explicitly labelled as candidates and do not claim factual verification.
 
