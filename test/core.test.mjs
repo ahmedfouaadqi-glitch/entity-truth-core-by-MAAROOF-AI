@@ -5,6 +5,7 @@ import { mkdtempSync, writeFileSync, existsSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { auditEntity, calculateFactDensity, checkDisambiguation, generateMachinePack } from "../dist/index.js";
+import { entityTextCorpus } from "./fixtures/entity-text-corpus.mjs";
 
 test("scans no more than first 100 lexical words",()=>{const first=Array.from({length:100},(_,i)=>"word"+i).join(" ");const r=calculateFactDensity(first+" 2024 88%","en");assert.equal(r.totalWordsAnalyzed,100);assert.equal(r.candidateSignalCount,0);});
 test("detects candidate signals in English",()=>{const r=calculateFactDensity("Founded in 2018, 35% growth, ISO 9001, serving 4 countries and USD 2500.","en");assert.ok(r.candidateSignalCount>=4);});
@@ -158,4 +159,34 @@ test("extracts a labelled Arabic service list as one candidate",()=>{
 test("contact and profile extraction remains explicitly unverified",()=>{
   const report=calculateFactDensity("Email: info@example.com; Phone: 07701234567; Address: Baghdad","en","full");
   assert.ok(report.limitations.some(item=>/ownership or current status is not checked/i.test(item)));
+});
+
+
+for (const [index, example] of entityTextCorpus.entries()) {
+  test("multilingual synthetic corpus " + String(index + 1).padStart(2, "0") + ": " + example.name, () => {
+    const report = calculateFactDensity(example.text, example.lang, "full");
+    const found = new Set(report.candidateSignals.map((signal) => signal.category));
+    for (const category of example.expected) {
+      assert.ok(found.has(category), "Expected candidate category " + category + "; found: " + [...found].join(", "));
+    }
+  });
+}
+
+test("empty local input returns an empty candidate list", () => {
+  const report = calculateFactDensity("", "ar", "full");
+  assert.equal(report.totalWordsAnalyzed, 0);
+  assert.equal(report.candidateSignalCount, 0);
+  assert.deepEqual(report.candidateSignals, []);
+});
+
+test("short unlabelled text does not invent contact or service values", () => {
+  const report = calculateFactDensity("Baghdad sample text", "en", "full");
+  assert.equal(report.candidateSignals.some((signal) => ["email", "telephone", "address", "service"].includes(signal.category)), false);
+});
+
+test("RTL and LTR text preserves original detected email and year values", () => {
+  const text = "تأسست عام ٢٠٢٠، contact info@example.org، وتخدم ٥ دول.";
+  const report = calculateFactDensity(text, "ar", "full");
+  assert.ok(report.candidateSignals.some((signal) => signal.category === "year" && signal.value === "٢٠٢٠"));
+  assert.ok(report.candidateSignals.some((signal) => signal.category === "email" && signal.value === "info@example.org"));
 });
