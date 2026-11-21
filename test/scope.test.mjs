@@ -10,6 +10,7 @@ const runtimeFiles = [
   "src/cli.ts",
   "src/mcp/server.ts",
   "src/mcp/tools.ts",
+  "playground/index.html",
 ];
 
 test("product scope policy is present and explicitly excludes verification", async () => {
@@ -25,7 +26,7 @@ test("runtime source contains no outbound network clients or browser network API
   );
   const combined = sources.join("\n");
   assert.doesNotMatch(combined, /\bfetch\s*\(/);
-  assert.doesNotMatch(combined, /\baxios\b|\bundici\b|XMLHttpRequest|WebSocket/);
+  assert.doesNotMatch(combined, /\baxios\b|\bundici\b|XMLHttpRequest|WebSocket|sendBeacon/);
   assert.doesNotMatch(combined, /from\s+["']node:(?:http|https)["']/);
 });
 
