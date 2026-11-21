@@ -39,8 +39,8 @@ This roadmap supersedes the earlier proposal to implement an optional external-v
 ### 1.2 Remaining parsing improvements
 
 - [ ] Add candidate extraction for email, telephone, year, address and service-name patterns.
-- [ ] Normalize Arabic-Indic and Persian digits locally before numeric parsing.
-- [ ] Improve Arabic normalization (diacritics, tatweel and carefully scoped letter normalization).
+- [x] Normalize Arabic-Indic and Persian digits locally before numeric parsing; preserve original text in reported candidate values.
+- [x] Improve Arabic matching normalization by removing diacritics and tatweel and folding common alef forms; preserve Sorani-specific characters.
 - [ ] Expand Arabic and Sorani Kurdish legal-form and organization-word dictionaries.
 - [ ] Support user-supplied Arabic, Latin and abbreviated aliases as alternateName suggestions.
 - [ ] Phrase name hints as warnings, never uniqueness or ownership claims.
