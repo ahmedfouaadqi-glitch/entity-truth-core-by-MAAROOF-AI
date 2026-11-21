@@ -31,12 +31,14 @@ test("MCP stdio server completes handshake, lists tools and serves an audit", as
         name: "Example Organization",
         headText: "Founded in 2018, ISO 9001 and serving 4 countries.",
         lang: "en",
+        window: 500,
       },
     });
     assert.notEqual(response.isError, true);
     assert.equal(response.content[0].type, "text");
     const result = JSON.parse(response.content[0].text);
     assert.equal(result.entity, "Example Organization");
+    assert.equal(result.factDensity.window, 500);
     assert.ok(result.factDensity.candidateSignalCount >= 2);
   } finally {
     await client.close();
