@@ -1,9 +1,20 @@
 import type { AnalysisWindow, DisambiguationCheck, FactDensityReport, FactSignal, HeuristicRisk, SupportedLang } from "./types.js";
 
 const COMMON_TERMS: Record<SupportedLang, Set<string>> = {
-  ar: new Set(["معروف","مشهور","أصيل","مميز","حديث","سريع","دولي","وطني","أول","شامل","رائد","ذكي","متقدم"]),
-  ku: new Set(["ناسراو","دیار","نوێ","خێرا","نێودەوڵەتی","یەکەم","پێشەنگ","باشترین","زیرەک"]),
-  en: new Set(["best","leading","fast","innovative","top","global","prime","smart","known","famous","first","modern","advanced"])
+  ar: new Set([
+    "معروف","مشهور","أصيل","مميز","حديث","سريع","دولي","وطني","أول","شامل","رائد","ذكي","متقدم",
+    "شركة","شركه","مؤسسة","موسسة","مجموعة","مجموعه","القابضة","قابضة","المحدودة","محدودة",
+    "تجارية","للتجارة","التجارة","العامة","ذمم","مسؤولية","مساهمة"
+  ]),
+  ku: new Set([
+    "ناسراو","دیار","نوێ","خێرا","نێودەوڵەتی","یەکەم","پێشەنگ","باشترین","زیرەک",
+    "کۆمپانیا","کۆمپانیای","دامەزراوە","گرووپ","گروپ","سنووردار","بازرگانی","گشتی","هاوبەش"
+  ]),
+  en: new Set([
+    "best","leading","fast","innovative","top","global","prime","smart","known","famous","first","modern","advanced",
+    "company","companies","co","corporation","corp","inc","incorporated","limited","ltd","llc","plc",
+    "group","holding","holdings","trading","general","enterprise","enterprises"
+  ])
 };
 
 const ARABIC_MARKS = /[\u064B-\u065F\u0670\u0640]/u;
