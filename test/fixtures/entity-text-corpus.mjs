@@ -198,7 +198,7 @@ export const entityTextCorpus = [
   {
     "lang": "ku",
     "name": "Sorani currency",
-    "text": "نرخەکە ١٠٠٠ د.عە.",
+    "text": "نرخەکە ١٠٠٠ د.ع.",
     "expected": [
       "currency"
     ]
