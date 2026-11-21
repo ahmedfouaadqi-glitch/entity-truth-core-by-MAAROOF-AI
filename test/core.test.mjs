@@ -75,3 +75,47 @@ test("CLI accepts --window full and rejects unsupported windows",()=>{
   assert.equal(JSON.parse(out).factDensity.window,"full");
   assert.throws(()=>execFileSync(process.execPath,[resolve("dist/cli.js"),"Example","--window","250","--json"]));
 });
+
+
+test("normalizes Arabic-Indic digits for detection while preserving original candidate text",()=>{
+  const text="تأسست عام ٢٠٢٠، ونموها ٢٥٪، وتخدم ٥ دول.";
+  const report=calculateFactDensity(text,"ar","full");
+  const year=report.candidateSignals.find(signal=>signal.category==="year");
+  const percentage=report.candidateSignals.find(signal=>signal.category==="percentage");
+  const scale=report.candidateSignals.find(signal=>signal.category==="scale");
+  assert.equal(year?.value,"٢٠٢٠");
+  assert.equal(percentage?.value,"٢٥٪");
+  assert.equal(scale?.value,"٥ دول");
+});
+
+test("normalizes Persian digits and Arabic decimal and thousands separators",()=>{
+  const text="الإيرادات ۱۲٫۵٪ والمبلغ ۱۲٬۵۰۰ د.ع";
+  const report=calculateFactDensity(text,"ar","full");
+  assert.ok(report.candidateSignals.some(signal=>signal.category==="percentage"&&signal.value==="۱۲٫۵٪"));
+  assert.ok(report.candidateSignals.some(signal=>signal.category==="currency"&&signal.value==="۱۲٬۵۰۰ د.ع"));
+});
+
+test("removes Arabic diacritics and tatweel for matching without rewriting source values",()=>{
+  const text="تَأْسَّسَت عـام ٢٠٢٠ وتخدم ٥ دُوَل بنسبة ٢٥٪";
+  const report=calculateFactDensity(text,"ar","full");
+  assert.ok(report.candidateSignals.some(signal=>signal.category==="year"&&signal.value==="٢٠٢٠"));
+  assert.ok(report.candidateSignals.some(signal=>signal.category==="scale"&&signal.value.includes("٥")));
+  assert.ok(report.candidateSignals.some(signal=>signal.category==="percentage"&&signal.value==="٢٥٪"));
+});
+
+test("normalizes common Arabic alef forms for local name hints",()=>{
+  const plain=checkDisambiguation("أصيل","ar");
+  const marked=checkDisambiguation("أَصِيل","ar");
+  assert.equal(plain.heuristicRisk,"high");
+  assert.equal(marked.heuristicRisk,"high");
+  assert.equal(marked.normalizedName,plain.normalizedName);
+});
+
+test("preserves the supplied source string when normalizing pattern matches",()=>{
+  const text="٢٠٢٤ و ٣٠٪";
+  const original=text;
+  const report=calculateFactDensity(text,"ar","full");
+  assert.equal(text,original);
+  assert.ok(report.candidateSignals.some(signal=>signal.value==="٢٠٢٤"));
+  assert.ok(report.candidateSignals.some(signal=>signal.value==="٣٠٪"));
+});
