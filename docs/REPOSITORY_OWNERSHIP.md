@@ -23,7 +23,7 @@ The owner has created and enabled this active branch ruleset:
 - Rules: restrict creation, updates and deletion; block non-fast-forward updates (force pushes).
 - Bypass: only the GitHub user `ahmedfouaadqi-glitch`, with `Always` bypass mode.
 
-GitHub's Rulesets API confirmed the active state, all-branches target, enabled rule types and user-specific bypass actor. The connected GitHub integration does not expose ruleset write operations, so additional rulesets must be created in GitHub Settings.
+GitHub's Rulesets API confirmed the active state, all-branches target, enabled rule types and user-specific bypass actor. The connected GitHub integration does not expose ruleset write operations, so the remaining rulesets must be imported through GitHub Settings. Import-ready definitions are stored in `docs/github-rulesets/`.
 
 ## Remaining GitHub controls
 
@@ -39,7 +39,7 @@ The connected GitHub integration can verify the authenticated owner's Admin perm
 
 ### 2. Main branch review gates
 
-Create a separate active branch ruleset targeting only `main`:
+Import `docs/github-rulesets/main-protection.json` from **Settings → Rulesets → New ruleset → Import a ruleset**. The definition targets only `refs/heads/main` and creates this active branch ruleset:
 
 - Name: `MAAROOF - Protect Main - PR and CI`.
 - Require a pull request before merging.
@@ -56,7 +56,7 @@ The current PR author is the repository owner. That author cannot approve their 
 
 ### 3. Official version tags
 
-Create an active tag ruleset:
+Import `docs/github-rulesets/official-version-tags.json` from **Settings → Rulesets → New ruleset → Import a ruleset**. The definition targets `refs/tags/v*` and creates this active tag ruleset:
 
 - Name: `MAAROOF - Protect Official Version Tags`.
 - Target tag pattern: `v*`.
@@ -76,4 +76,4 @@ This allows the owner to publish and manage official version tags while preventi
 - [ ] A second trusted code owner is designated before Code Owner approval is made mandatory.
 - [ ] All rulesets verified as Active, not Disabled or Evaluate.
 
-Until the remaining collaborator-permission, `main` and `v*` controls are verified, the repository must not be described as fully protected. The implementation pull request therefore remains Draft and unmerged.
+Detailed local import instructions are in `docs/github-rulesets/README.md`. After importing, verify that both new rulesets appear in GitHub as Active and their targets and bypass lists match the JSON files. Until the remaining collaborator-permission, `main` and `v*` controls are verified, the repository must not be described as fully protected. The implementation pull request therefore remains Draft and unmerged.
