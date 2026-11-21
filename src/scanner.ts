@@ -144,6 +144,6 @@ export function checkDisambiguation(name:string,lang:SupportedLang="en"):Disambi
   return {
     entityName:name,normalizedName,heuristicRisk,exactCommonTermMatch:exact,matchedCommonTerms:matched,shortNameSignal:short,lexiconCoverage:"limited-static-lexicon",
     limitations:["This uses a small static word list, not a global entity search.","It does not query search engines, company registries, trademark databases, or knowledge graphs.","Low heuristic risk does not prove uniqueness; high risk does not prove ownership by another organization."],
-    recommendation:exact||matched.length?"Consider pairing the name with a precise industry descriptor in official references, then check independent sources.":short?"Short names can overlap with acronyms. Check exact-name results in independent directories and official registries.":"No match was found in this small word list. This is not proof that the name is globally unique."
+    recommendation:exact||matched.length?"Consider pairing the name with a precise industry descriptor when preparing the profile. This is a naming hint only, not an ownership or uniqueness assessment.":short?"Short names can be ambiguous. Consider adding a clear descriptor when preparing the profile; this is not a uniqueness check.":"No match was found in this small word list. This is not proof that the name is globally unique."
   };
 }
