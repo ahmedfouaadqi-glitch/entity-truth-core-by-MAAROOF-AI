@@ -1,4 +1,5 @@
 export type SupportedLang = "ar" | "ku" | "en";
+export type AnalysisWindow = 100 | 500 | "full";
 export type HeuristicRisk = "low" | "medium" | "high" | "unknown";
 
 export interface EntityInput {
@@ -8,8 +9,10 @@ export interface EntityInput {
   url?: string;
   /** Short description supplied by the user. */
   description?: string;
-  /** Opening text to inspect. Only the first 100 lexical words are scanned. */
+  /** Opening text supplied by the user for local candidate-pattern scanning. */
   headText?: string;
+  /** Maximum lexical-word scan window. Defaults to 100; "full" scans all supplied text. */
+  window?: AnalysisWindow;
   /** User-supplied alternate names. */
   aliases?: string[];
   /** User-supplied languages the entity operates in. None are assumed by default. */
@@ -30,7 +33,10 @@ export interface FactSignal {
 
 export interface FactDensityReport {
   method: "heuristic-pattern-scan";
-  maxWords: 100;
+  /** Selected window; "full" means the entire supplied text was scanned. */
+  window: AnalysisWindow;
+  /** Effective word ceiling; for "full", this equals the lexical word count. */
+  maxWords: number;
   totalWordsAnalyzed: number;
   candidateSignalCount: number;
   candidateSignals: FactSignal[];
