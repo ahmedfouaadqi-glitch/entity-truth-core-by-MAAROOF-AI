@@ -10,6 +10,7 @@ The project is independently usable through its TypeScript core, CLI, local MCP 
 
 - Deterministic, local processing of user-supplied entity names and text.
 - Candidate pattern extraction from a selectable text window: 100 words (default), 500 words, or all supplied text.
+- Conservative extraction of email, formatted or labelled phone numbers, labelled addresses and labelled service lists from supplied text; these remain unverified text candidates.
 - Arabic, Sorani Kurdish and English normalization and heuristic improvements that do not require external services.
 - Generation of draft Schema.org JSON-LD and llms.txt-style entity profiles from explicit user input.
 - Local structural validation of supported output structures, with clearly stated limitations.
