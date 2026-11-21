@@ -11,6 +11,8 @@
 ## Unreleased — local agent and self-hosting milestone
 
 ### Scope and local scan window
+- Added a 30-case synthetic regression corpus covering English, Arabic, Sorani Kurdish and mixed RTL/LTR profile text, plus empty/short-input and source-preservation boundary checks.
+- CI now exercises 80 tests on each of Node.js 20 and 22, including the local-only architecture guard.
 - Added local Arabic-Indic and Persian digit normalization, Arabic percent and numeric separators, diacritic/tatweel removal and carefully scoped alef normalization while preserving original candidate text.
 - Added candidate extraction for email, formatted or labelled telephone numbers, labelled addresses and labelled service lists; these are text candidates only and are not verified.
 - Updated the browser playground to localize candidate category labels in Arabic, Sorani Kurdish and English.
