@@ -84,3 +84,13 @@ test("MCP scan wrapper forwards the selected local analysis window", () => {
   assert.equal(result.factDensity.window, 500);
   assert.ok(result.factDensity.candidateSignals.some((signal) => signal.category === "year"));
 });
+
+
+test("browser playground exposes the same 100, 500 and full scan windows", async () => {
+  const html = await readFile(new URL("../playground/index.html", import.meta.url), "utf8");
+  assert.match(html, /<select id="window">/);
+  assert.match(html, /option value="100"/);
+  assert.match(html, /option value="500"/);
+  assert.match(html, /option value="full"/);
+  assert.match(html, /window:\s*\$\("window"\)/);
+});
