@@ -136,10 +136,11 @@ export function calculateFactDensity(text:string,lang:SupportedLang="en",window:
     }
   }
 
-  const formattedPhone=/(?<![\p{L}\p{N}])(?:\+?[0-9]{1,3}[ .()-]?)?(?:\(?[0-9]{2,4}\)?[ .-]+)[0-9]{3,4}[ .-]+[0-9]{3,4}(?![\p{L}\p{N}])/gu;
+  const formattedPhone=/(?<![\p{L}\p{N}])\+?[0-9][0-9 .()-]{5,20}[0-9](?![\p{L}\p{N}])/gu;
   for(const match of normalizedText.matchAll(formattedPhone)){
     const digits=match[0].replace(/[^0-9]/g,"").length;
-    if(digits>=7 && digits<=15) addSignal("telephone",match.index??0,match[0].length);
+    const separators=match[0].match(/[ .()-]/g)?.length??0;
+    if(digits>=7 && digits<=15 && separators>=2) addSignal("telephone",match.index??0,match[0].length);
   }
 
   const labelledAddress=/(?:address|location|العنوان(?:\s+التفصيلي)?|ناونیشان)\s*[:：-]\s*([^\n;]{5,160})/giu;
