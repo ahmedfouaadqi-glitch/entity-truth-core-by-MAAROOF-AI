@@ -1,0 +1,47 @@
+name: Feature request
+description: Propose an in-scope local preparation improvement.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: "Read docs/PRODUCT_SCOPE.md first. External research, crawling, fact verification, AI visibility measurement, competitor analysis and strategy features are explicitly out of scope."
+  - type: dropdown
+    id: area
+    attributes:
+      label: In-scope area
+      options:
+        - Local text parsing or normalization
+        - Arabic / Sorani Kurdish / English handling
+        - Schema.org profile preparation
+        - Local structural validation
+        - CLI / MCP / browser usability
+        - Local report or export
+        - Documentation or testing
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Explain the local preparation problem, not a research or verification need.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed behavior
+      description: Describe user input, local processing and expected output.
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Product boundary
+      options:
+        - label: This can run using user-supplied or local data without external requests.
+          required: true
+        - label: It does not require MAAROOF AI production services or AI provider APIs.
+          required: true
+        - label: It does not claim factual verification, ranking, or visibility measurement.
+          required: true
