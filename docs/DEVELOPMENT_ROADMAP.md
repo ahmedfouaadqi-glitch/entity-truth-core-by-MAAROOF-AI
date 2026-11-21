@@ -41,8 +41,8 @@ This roadmap supersedes the earlier proposal to implement an optional external-v
 - [x] Add conservative candidate extraction for email, formatted or explicitly labelled telephone numbers, years, labelled addresses and labelled service lists; do not validate or infer these values.
 - [x] Normalize Arabic-Indic and Persian digits locally before numeric parsing; preserve original text in reported candidate values.
 - [x] Improve Arabic matching normalization by removing diacritics and tatweel and folding common alef forms; preserve Sorani-specific characters.
-- [ ] Expand Arabic and Sorani Kurdish legal-form and organization-word dictionaries.
-- [ ] Support user-supplied Arabic, Latin and abbreviated aliases as alternateName suggestions.
+- [x] Expand Arabic and Sorani Kurdish legal-form and organization-word dictionaries; add common English legal suffixes as warning-only terms.
+- [x] Preserve user-supplied Arabic, Latin and abbreviated aliases as draft `alternateName` values; do not invent aliases.
 - [x] Phrase name hints as warnings, never uniqueness or ownership claims.
 
 ### 1.3 Test corpus
