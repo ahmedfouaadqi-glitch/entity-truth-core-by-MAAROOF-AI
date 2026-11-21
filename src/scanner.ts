@@ -107,20 +107,53 @@ export function calculateFactDensity(text:string,lang:SupportedLang="en",window:
   const {snippet,count,maxWords}=selected;
   const mapped=normalizeForPatternMatching(snippet);
   const normalizedText=mapped.text;
+  const signals:FactSignal[]=[];
+  const addSignal=(category:FactSignal["category"],startIndex:number,length:number)=>{
+    const start=mapped.sourceStart[startIndex]??0;
+    const end=mapped.sourceEnd[startIndex+length-1]??start;
+    const value=snippet.slice(start,end).trim().replace(/^[^\p{L}\p{N}$€£]+/u,"");
+    if(value) signals.push({category,value});
+  };
   const patterns:Array<[FactSignal["category"],RegExp]>=[
-    ["year",/(?:19|20)[0-9]{2}/gu],
+    ["year",/(?<![0-9])(?:19|20)[0-9]{2}(?![0-9])/gu],
     ["percentage",/(?:^|[^\p{L}\p{N}])[0-9]{1,3}(?:[.,][0-9]+)?\s?%(?=$|[^\p{L}\p{N}])/gu],
     ["standard",/\b(?:ISO[\s-]?\d{3,5}(?:-\d+)?|GDPR|SOC\s?2|PCI[\s-]?DSS|POSIX)\b/giu],
     ["scale",/(?:^|[^\p{L}\p{N}])[0-9][0-9,.]*\+?\s*(?:users?|customers?|clients?|branches|countries|employees|offices|products|عميل|عملاء|فرع|فروع|دولة|دول|مستخدم|مستخدمين|وڵات|کڕیار|بەکارهێنەر)(?=$|[^\p{L}\p{N}])/giu],
-    ["currency",/(?:[$€£]\s?[0-9][0-9,.]*|\b(?:IQD|USD|EUR|GBP)\s?[0-9][0-9,.]*\b|[0-9][0-9,.]*\s?(?:IQD|USD|EUR|GBP|د\s*\.\s*ع|دولار|یۆرۆ)(?![\p{L}\p{N}]))/giu]
+    ["currency",/(?:[$€£]\s?[0-9][0-9,.]*|\b(?:IQD|USD|EUR|GBP)\s?[0-9][0-9,.]*\b|[0-9][0-9,.]*\s?(?:IQD|USD|EUR|GBP|د\s*\.\s*ع|دولار|یۆرۆ)(?![\p{L}\p{N}]))/giu],
+    ["email",/[A-Z0-9.!#$%&'*+/=?^_{|}~-]+@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,63}/giu]
   ];
-  const signals:FactSignal[]=[];
   for(const [category,pattern] of patterns) for(const match of normalizedText.matchAll(pattern)) {
-    const index=match.index??0;
-    const start=mapped.sourceStart[index]??0;
-    const end=mapped.sourceEnd[index+match[0].length-1]??start;
-    const value=snippet.slice(start,end).trim().replace(/^[^\p{L}\p{N}$€£]+/u,"");
-    if(value) signals.push({category,value});
+    addSignal(category,match.index??0,match[0].length);
+  }
+
+  const labelledPhone=/(?:phone|telephone|mobile|tel|هاتف|موبايل|تلفون|ژمارەی\s+تەلەفۆن)\s*[:：-]?\s*(\+?[0-9][0-9 .()-]{5,20}[0-9])/giu;
+  for(const match of normalizedText.matchAll(labelledPhone)){
+    const value=match[1]??"";
+    const digits=value.replace(/[^0-9]/g,"").length;
+    if(digits>=7 && digits<=15){
+      const offset=match[0].lastIndexOf(value);
+      addSignal("telephone",(match.index??0)+offset,value.length);
+    }
+  }
+
+  const formattedPhone=/(?<![\p{L}\p{N}])(?:\+?[0-9]{1,3}[ .()-]?)?(?:\(?[0-9]{2,4}\)?[ .-]+)[0-9]{3,4}[ .-]+[0-9]{3,4}(?![\p{L}\p{N}])/gu;
+  for(const match of normalizedText.matchAll(formattedPhone)){
+    const digits=match[0].replace(/[^0-9]/g,"").length;
+    if(digits>=7 && digits<=15) addSignal("telephone",match.index??0,match[0].length);
+  }
+
+  const labelledAddress=/(?:address|location|العنوان(?:\s+التفصيلي)?|ناونیشان)\s*[:：-]\s*([^\n;]{5,160})/giu;
+  for(const match of normalizedText.matchAll(labelledAddress)){
+    const value=match[1]??"";
+    const offset=match[0].lastIndexOf(value);
+    addSignal("address",(match.index??0)+offset,value.length);
+  }
+
+  const labelledServices=/(?:our\s+services|services?|products|الخدمات|خدماتنا|خزمەتگوزارییەکان|خزمەتگوزاری)\s*[:：-]\s*([^\n;]{3,180})/giu;
+  for(const match of normalizedText.matchAll(labelledServices)){
+    const value=match[1]??"";
+    const offset=match[0].lastIndexOf(value);
+    addSignal("service",(match.index??0)+offset,value.length);
   }
   const candidates=unique(signals), signalDensity=count?candidates.length/count:0;
   const windowDescription=window==="full"?"All lexical words in the supplied text were examined.":"Only the first "+window+" lexical words are examined.";
@@ -128,8 +161,8 @@ export function calculateFactDensity(text:string,lang:SupportedLang="en",window:
     method:"heuristic-pattern-scan",window,maxWords,totalWordsAnalyzed:count,candidateSignalCount:candidates.length,candidateSignals:candidates,
     signalDensity:Math.round(signalDensity*1000)/1000,
     heuristicScore:Math.min(100,Math.round(candidates.length/4*100)),
-    interpretation:candidates.length>=4?"Several number/date/standard patterns were detected. Verify each item and its source.":candidates.length>=2?"Some candidate patterns were detected. Review them and add sourced details where useful.":"Few candidate patterns were detected. This does not mean the entity lacks facts.",
-    limitations:["Detected patterns are candidates, not verified facts.","A number, date, percentage, currency, or standard can be false, outdated, or unrelated.","The scanner uses lightweight patterns and does not understand every language inflection.","Arabic-Indic and Persian digits, Arabic percent/number separators, common Arabic alef forms, diacritics and tatweel are normalized only for local pattern matching; returned candidate values preserve the supplied text.","The heuristic score is not a search-ranking factor or an AI-visibility measurement.",windowDescription]
+    interpretation:candidates.length>=4?"Several candidate patterns were detected. Review each item against your own records.":candidates.length>=2?"Some candidate patterns were detected. Review them before using the generated profile.":"Few candidate patterns were detected. This does not mean the entity lacks facts.",
+    limitations:["Detected patterns are candidates, not verified facts.", "Emails, phone numbers, labelled addresses and labelled service lists are extracted only as text candidates; their validity, ownership or current status is not checked.","A number, date, percentage, currency, or standard can be false, outdated, or unrelated.","The scanner uses lightweight patterns and does not understand every language inflection.","Arabic-Indic and Persian digits, Arabic percent/number separators, common Arabic alef forms, diacritics and tatweel are normalized only for local pattern matching; returned candidate values preserve the supplied text.","The heuristic score is not a search-ranking factor or an AI-visibility measurement.",windowDescription]
   };
 }
 
