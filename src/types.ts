@@ -27,7 +27,7 @@ export interface EntityInput {
 }
 
 export interface FactSignal {
-  category: "year" | "percentage" | "standard" | "scale" | "currency";
+  category: "year" | "percentage" | "standard" | "scale" | "currency" | "email" | "telephone" | "address" | "service";
   value: string;
 }
 
