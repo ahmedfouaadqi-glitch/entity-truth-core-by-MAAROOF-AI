@@ -126,3 +126,36 @@ test("name hints stay descriptive and do not direct external verification",()=>{
   assert.match(result.recommendation,/not a uniqueness check/i);
   assert.doesNotMatch(result.recommendation,/search engines|registries|independent directories/i);
 });
+
+
+test("extracts an email address only as a supplied text candidate",()=>{
+  const report=calculateFactDensity("Contact: info@example.com","en","full");
+  assert.ok(report.candidateSignals.some(signal=>signal.category==="email"&&signal.value==="info@example.com"));
+});
+
+test("extracts labelled Arabic telephone numbers with Arabic-Indic digits",()=>{
+  const report=calculateFactDensity("هاتف: ٠٧٧٠ ١٢٣ ٤٥٦٧","ar","full");
+  assert.ok(report.candidateSignals.some(signal=>signal.category==="telephone"&&signal.value==="٠٧٧٠ ١٢٣ ٤٥٦٧"));
+});
+
+test("extracts formatted international telephone numbers as candidates",()=>{
+  const report=calculateFactDensity("Call +964 770 123 4567 for information.","en","full");
+  assert.ok(report.candidateSignals.some(signal=>signal.category==="telephone"&&signal.value==="+964 770 123 4567"));
+});
+
+test("extracts an address only when the input contains an address label",()=>{
+  const report=calculateFactDensity("Address: 123 Example Street, Baghdad, Iraq","en","full");
+  assert.ok(report.candidateSignals.some(signal=>signal.category==="address"&&signal.value==="123 Example Street, Baghdad, Iraq"));
+  const unlabeled=calculateFactDensity("123 Example Street, Baghdad, Iraq","en","full");
+  assert.equal(unlabeled.candidateSignals.some(signal=>signal.category==="address"),false);
+});
+
+test("extracts a labelled Arabic service list as one candidate",()=>{
+  const report=calculateFactDensity("الخدمات: تصميم المواقع، تطبيقات الهاتف","ar","full");
+  assert.ok(report.candidateSignals.some(signal=>signal.category==="service"&&signal.value==="تصميم المواقع، تطبيقات الهاتف"));
+});
+
+test("contact and profile extraction remains explicitly unverified",()=>{
+  const report=calculateFactDensity("Email: info@example.com; Phone: 07701234567; Address: Baghdad","en","full");
+  assert.ok(report.limitations.some(item=>/ownership or current status is not checked/i.test(item)));
+});
