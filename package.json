@@ -1,0 +1,39 @@
+{
+  "name": "@maaroof/entity-truth-core",
+  "version": "0.1.0",
+  "description": "Local entity profile inspector and machine-readable profile pack generator.",
+  "license": "MIT",
+  "author": "Ahmed Maaroof",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "entity-truth": "./dist/cli.js"
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "clean": "node -e \"import('node:fs/promises').then(fs => fs.rm('dist', { recursive: true, force: true }))\"",
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "check": "npm test",
+    "prepack": "npm run build"
+  },
+  "engines": {"node": ">=20"},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahmedfouaadqi-glitch/entity-truth-core-by-MAAROOF-AI.git"
+  },
+  "bugs": {"url": "https://github.com/ahmedfouaadqi-glitch/entity-truth-core-by-MAAROOF-AI/issues"},
+  "homepage": "https://maaroofai.com",
+  "keywords": ["entity-intelligence", "schema-org", "json-ld", "llms-txt", "arabic", "sorani-kurdish", "maaroof-ai"],
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.8.3"
+  }
+}
