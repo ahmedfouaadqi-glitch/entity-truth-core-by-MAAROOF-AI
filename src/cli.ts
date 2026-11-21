@@ -25,19 +25,19 @@ Privacy: local-only. No website fetching, network call or API is used.`);}
 function value(args:string[],i:number,flag:string):[string,number]{const v=args[i+1];if(!v||v.startsWith("--"))throw new Error(flag+" requires a value.");return[v,i+1];}
 async function main(){
   try{
-    const args=process.argv.slice(2);let name="",text="",description="",url="",lang:SupportedLang="en",inputFile="",outDir="",asJson=false,force=false;
+    const args=process.argv.slice(2);let name="",text="",description="",url="",lang:SupportedLang="en",langSpecified=false,inputFile="",outDir="",asJson=false,force=false;
     const markets:string[]=[],aliases:string[]=[],profiles:string[]=[],facts:string[]=[];
     for(let i=0;i<args.length;i++){
       const a=args[i]!;
       if(a==="--help"||a==="-h"){help();return;}else if(a==="--json")asJson=true;else if(a==="--force")force=true;
       else if(a==="--input"){[inputFile,i]=value(args,i,a);}else if(a==="--text"){[text,i]=value(args,i,a);}
       else if(a==="--description"){[description,i]=value(args,i,a);}else if(a==="--url"){[url,i]=value(args,i,a);}
-      else if(a==="--out-dir"){[outDir,i]=value(args,i,a);}else if(a==="--lang"){const v=value(args,i,a);i=v[1];if(!["ar","ku","en"].includes(v[0]))throw new Error("Language must be ar, ku or en.");lang=v[0] as SupportedLang;}
+      else if(a==="--out-dir"){[outDir,i]=value(args,i,a);}else if(a==="--lang"){const v=value(args,i,a);i=v[1];if(!["ar","ku","en"].includes(v[0]))throw new Error("Language must be ar, ku or en.");lang=v[0] as SupportedLang;langSpecified=true;}
       else if(["--market","--alias","--profile","--fact"].includes(a)){const v=value(args,i,a);i=v[1];({ "--market":markets,"--alias":aliases,"--profile":profiles,"--fact":facts } as Record<string,string[]>)[a]!.push(v[0]);}
       else if(a.startsWith("--"))throw new Error("Unknown option: "+a);else if(!name)name=a;else throw new Error("Unexpected argument: "+a);
     }
     let input:EntityInput;
-    if(inputFile){const raw=JSON.parse(await readFile(resolve(inputFile),"utf8")) as EntityInput;input={...raw,...(text?{headText:text}:{}),...(description?{description}:{}),...(url?{url}:{}),...(markets.length?{markets:[...(raw.markets||[]),...markets]}:{}),...(aliases.length?{aliases:[...(raw.aliases||[]),...aliases]}:{}),...(profiles.length?{officialProfiles:[...(raw.officialProfiles||[]),...profiles]}:{}),...(facts.length?{facts:[...(raw.facts||[]),...facts]}:{}),lang};}
+    if(inputFile){const raw=JSON.parse(await readFile(resolve(inputFile),"utf8")) as EntityInput;input={...raw,...(text?{headText:text}:{}),...(description?{description}:{}),...(url?{url}:{}),...(markets.length?{markets:[...(raw.markets||[]),...markets]}:{}),...(aliases.length?{aliases:[...(raw.aliases||[]),...aliases]}:{}),...(profiles.length?{officialProfiles:[...(raw.officialProfiles||[]),...profiles]}:{}),...(facts.length?{facts:[...(raw.facts||[]),...facts]}:{}),...(langSpecified?{lang}:{})};}
     else {if(!name)throw new Error("Provide an entity name or --input JSON.");input={name,headText:text,description,url,lang,markets,aliases,officialProfiles:profiles,facts};}
     const result=auditEntity(input);
     if(outDir){
