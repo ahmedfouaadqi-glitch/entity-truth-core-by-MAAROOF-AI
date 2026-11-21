@@ -119,3 +119,10 @@ test("preserves the supplied source string when normalizing pattern matches",()=
   assert.ok(report.candidateSignals.some(signal=>signal.value==="٢٠٢٤"));
   assert.ok(report.candidateSignals.some(signal=>signal.value==="٣٠٪"));
 });
+
+
+test("name hints stay descriptive and do not direct external verification",()=>{
+  const result=checkDisambiguation("ABC","en");
+  assert.match(result.recommendation,/not a uniqueness check/i);
+  assert.doesNotMatch(result.recommendation,/search engines|registries|independent directories/i);
+});
