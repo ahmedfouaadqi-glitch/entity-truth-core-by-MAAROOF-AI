@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111111">
+<title>Entity Truth Core — MAAROOF AI</title>
+<style>
+:root{color-scheme:dark;--bg:#101010;--panel:#191919;--panel2:#202020;--line:#303030;--text:#f4f1e8;--muted:#aaa69a;--gold:#e2b63d;--gold2:#f0cd69;--ok:#95c7a3;--warn:#e4bd62}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 500px at 75% -15%,#282313 0,transparent 70%),var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+.wrap{max-width:1050px;margin:auto;padding:32px 20px 70px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:54px}.brand{display:flex;align-items:center;gap:12px;font-weight:750;letter-spacing:.02em}.mark{width:38px;height:38px;border:1px solid var(--gold);border-radius:11px;display:grid;place-items:center;color:var(--gold);font-weight:900}.by{color:var(--muted);font-size:12px;display:block;letter-spacing:.12em}.langs{display:flex;gap:6px}.lang{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:20px;padding:6px 11px;cursor:pointer}.lang.active{background:#302715;color:var(--gold2);border-color:#7b6025}
+.hero{max-width:760px;margin:0 auto 32px;text-align:center}.eyebrow{color:var(--gold);font-size:12px;letter-spacing:.18em;font-weight:750}.hero h1{font-size:clamp(31px,5vw,52px);line-height:1.16;margin:14px 0}.hero p{color:var(--muted);margin:0 auto;max-width:650px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.card{background:linear-gradient(145deg,#1d1d1d,#151515);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 18px 45px #0003}.card h2{font-size:18px;margin:0 0 16px}.form{display:grid;gap:14px}.field label{display:block;font-size:13px;color:#d9d4c6;margin-bottom:6px}.field input,.field textarea{width:100%;background:#101010;border:1px solid #373737;border-radius:10px;padding:12px 13px;color:var(--text);font:inherit;outline:none}.field input:focus,.field textarea:focus{border-color:var(--gold)}.field textarea{min-height:86px;resize:vertical}.help{font-size:12px;color:var(--muted);margin-top:5px}.checks{display:flex;flex-wrap:wrap;gap:12px}.checks label{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:13px}.checks input{accent-color:var(--gold)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:5px}.primary{border:0;border-radius:11px;background:var(--gold);color:#17130a;padding:12px 19px;font:700 15px system-ui;cursor:pointer}.primary:hover{background:var(--gold2)}.primary:disabled{opacity:.45;cursor:not-allowed}.subtle{color:var(--muted);font-size:12px}
+.results{margin-top:18px;display:none}.results.show{display:block}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}.metric{background:#111;border:1px solid var(--line);border-radius:12px;padding:13px}.metric strong{font-size:23px;display:block;color:var(--gold2)}.metric span{font-size:12px;color:var(--muted)}
+.list{padding:0;margin:8px 0;list-style:none}.list li{border-top:1px solid #2b2b2b;padding:9px 0;overflow-wrap:anywhere}.pill{display:inline-block;border:1px solid #4b3b1b;color:var(--gold2);background:#292112;border-radius:999px;font-size:11px;padding:1px 8px;margin-inline-start:6px}.notice{border:1px solid #6a5426;background:#241e11;color:#e8d9b1;border-radius:12px;padding:12px 14px;font-size:13px;margin-top:12px}.downloads{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.download{border:1px solid #494949;color:var(--text);background:#202020;padding:9px 12px;border-radius:9px;cursor:pointer}.download:hover{border-color:var(--gold);color:var(--gold2)}
+.bottom{margin-top:20px;padding:22px;border:1px solid var(--line);border-radius:16px;background:#161616}.bottom h3{margin:0 0 5px;font-size:17px}.bottom p{color:var(--muted);margin:0 0 12px;font-size:14px}.bottom a{color:var(--gold2);text-decoration:none;font-weight:700}.foot{margin-top:34px;text-align:center;color:#777;font-size:12px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{margin-bottom:38px}.metrics{grid-template-columns:1fr 1fr}.metric:last-child{grid-column:span 2}.wrap{padding:22px 14px 50px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header class="top">
+  <div class="brand"><div class="mark">E</div><div>ENTITY TRUTH CORE<span class="by">BY MAAROOF AI</span></div></div>
+  <nav class="langs" aria-label="Interface language">
+    <button class="lang active" data-lang="ar">عربي</button><button class="lang" data-lang="ku">کوردی</button><button class="lang" data-lang="en">EN</button>
+  </nav>
+</header>
+<section class="hero">
+  <div class="eyebrow" data-i="eyebrow">أداة مجانية مستقلة ومفتوحة المصدر</div>
+  <h1 data-i="title">اجعل هوية كيانك أوضح للقراءة الآلية.</h1>
+  <p data-i="intro">فحص أولي لمعلومات شركتك، ثم تجهيز مسودة بيانات منظمة وملف تعريفي. يعمل كل شيء داخل متصفحك دون إرسال بياناتك إلى خادم.</p>
+</section>
+<section class="grid">
+  <div class="card">
+    <h2 data-i="formTitle">معلومات الكيان</h2>
+    <form id="entityForm" class="form">
+      <div class="field"><label for="name" data-i="nameLabel">اسم الشركة أو العلامة التجارية *</label><input id="name" required maxlength="200" placeholder="مثال: Example Company" data-ph="namePh"></div>
+      <div class="field"><label for="url" data-i="urlLabel">الموقع الرسمي (اختياري)</label><input id="url" type="url" placeholder="https://example.com"></div>
+      <div class="field"><label for="description" data-i="descriptionLabel">وصف مختصر (اختياري)</label><textarea id="description" maxlength="500" data-ph="descPh"></textarea></div>
+      <div class="field"><label for="headText" data-i="textLabel">النص التعريفي الذي تريد فحصه</label><textarea id="headText" data-ph="textPh"></textarea><div class="help" data-i="textHelp">يفحص أول 100 كلمة فقط بحثاً عن إشارات رقمية وتواريخ ومعايير. لا يتحقق من صحتها.</div></div>
+      <div class="field"><label for="markets" data-i="marketsLabel">الأسواق التي تخدمها (اختياري)</label><input id="markets" data-ph="marketsPh"><div class="help" data-i="marketsHelp">افصل بين الأسواق بفاصلة. لن نفترض أن نشاطك عالمي.</div></div>
+      <div class="field"><label data-i="languagesLabel">لغات الكيان (لا لغات الأداة)</label><div class="checks"><label><input type="checkbox" value="ar" class="entityLanguage"> العربية</label><label><input type="checkbox" value="ku" class="entityLanguage"> کوردی</label><label><input type="checkbox" value="en" class="entityLanguage"> English</label></div></div>
+      <div class="field"><label for="aliases" data-i="aliasesLabel">أسماء بديلة (اختياري)</label><input id="aliases" data-ph="aliasesPh"></div>
+      <div class="actions"><button class="primary" id="run" type="submit" data-i="run">افحص الكيان</button><span class="subtle" data-i="localOnly">محلي بالكامل · دون زحف أو API</span></div>
+    </form>
+  </div>
+  <div class="card" id="resultCard">
+    <h2 data-i="resultTitle">نتيجة الفحص الأولي</h2>
+    <div id="empty"><p class="subtle" data-i="empty">أدخل بيانات الكيان واضغط «افحص الكيان». لن يتم إرسال أي شيء إلى الإنترنت.</p></div>
+    <div id="results" class="results">
+      <div class="metrics">
+        <div class="metric"><strong id="wordCount">0</strong><span data-i="words">كلمة مفحوصة / 100</span></div>
+        <div class="metric"><strong id="signalCount">0</strong><span data-i="signals">إشارات مرشحة</span></div>
+        <div class="metric"><strong id="nameHint">—</strong><span data-i="nameHintLabel">ملاحظة الاسم</span></div>
+      </div>
+      <h3 data-i="signalsTitle">الإشارات التي عثر عليها الفحص</h3>
+      <ul class="list" id="signalsList"></ul>
+      <h3 data-i="packTitle">مسودة حزمة الكيان</h3>
+      <ul class="list" id="packList"></ul>
+      <div class="notice" data-i="disclaimer">هذه أداة فحص أولي. لا تتحقق من الحقائق أو ملكية الروابط، ولا تقيس ظهورك في محركات البحث أو إجابات الذكاء الاصطناعي.</div>
+      <div class="downloads">
+        <button class="download" id="dlJsonld" data-i="dlJsonld">تنزيل JSON-LD</button>
+        <button class="download" id="dlLlms" data-i="dlLlms">تنزيل llms.txt</button>
+        <button class="download" id="dlReport" data-i="dlReport">تنزيل تقرير JSON</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="bottom">
+  <h3 data-i="nextTitle">تحتاج إلى تحليل أعمق؟</h3>
+  <p data-i="nextText">هذه الأداة تجهّز وصف الكيان فقط. MAAROOF AI يقدم البحث والتحقق من المصادر وقياس الظهور وتحليل المنافسين وبناء الاستراتيجيات والتنفيذ.</p>
+  <a href="https://maaroofai.com" target="_blank" rel="noopener noreferrer" data-i="nextLink">اكتشف MAAROOF AI ←</a>
+</section>
+<footer class="foot">ENTITY TRUTH CORE · OPEN SOURCE TOOL BY MAAROOF AI · LOCAL-FIRST</footer>
+</main>
+<script type="module">
+import { auditEntity } from "../dist/index.js";
+const copy={
+ar:{eyebrow:"أداة مجانية مستقلة ومفتوحة المصدر",title:"اجعل هوية كيانك أوضح للقراءة الآلية.",intro:"فحص أولي لمعلومات شركتك، ثم تجهيز مسودة بيانات منظمة وملف تعريفي. يعمل كل شيء داخل متصفحك دون إرسال بياناتك إلى خادم.",formTitle:"معلومات الكيان",nameLabel:"اسم الشركة أو العلامة التجارية *",namePh:"مثال: شركة المثال",urlLabel:"الموقع الرسمي (اختياري)",descriptionLabel:"وصف مختصر (اختياري)",descPh:"ماذا تقدم الشركة؟ لمن؟ وفي أي قطاع؟",textLabel:"النص التعريفي الذي تريد فحصه",textPh:"الصق مقدمة موقعك أو تعريف الشركة هنا...",textHelp:"يفحص أول 100 كلمة فقط بحثاً عن إشارات رقمية وتواريخ ومعايير. لا يتحقق من صحتها.",marketsLabel:"الأسواق التي تخدمها (اختياري)",marketsPh:"العراق، الإمارات، ألمانيا",marketsHelp:"افصل بين الأسواق بفاصلة. لن نفترض أن نشاطك عالمي.",languagesLabel:"لغات الكيان (لا لغات الأداة)",aliasesLabel:"أسماء بديلة (اختياري)",aliasesPh:"اسم مختصر، اسم تجاري آخر",run:"افحص الكيان",localOnly:"محلي بالكامل · دون زحف أو API",resultTitle:"نتيجة الفحص الأولي",empty:"أدخل بيانات الكيان واضغط «افحص الكيان». لن يتم إرسال أي شيء إلى الإنترنت.",words:"كلمة مفحوصة / 100",signals:"إشارات مرشحة",nameHintLabel:"ملاحظة الاسم",signalsTitle:"الإشارات التي عثر عليها الفحص",packTitle:"مسودة حزمة الكيان",disclaimer:"هذه أداة فحص أولي. لا تتحقق من الحقائق أو ملكية الروابط، ولا تقيس ظهورك في محركات البحث أو إجابات الذكاء الاصطناعي.",dlJsonld:"تنزيل JSON-LD",dlLlms:"تنزيل llms.txt",dlReport:"تنزيل تقرير JSON",nextTitle:"تحتاج إلى تحليل أعمق؟",nextText:"هذه الأداة تجهّز وصف الكيان فقط. MAAROOF AI يقدم البحث والتحقق من المصادر وقياس الظهور وتحليل المنافسين وبناء الاستراتيجيات والتنفيذ.",nextLink:"اكتشف MAAROOF AI ←",hintLow:"لا توجد إشارة واضحة",hintMid:"راجع وضوح الاسم",hintHigh:"اسم عام أو وصفي",urlInvalid:"لم يُدرج الموقع: الرابط غير صالح أو ليس HTTP(S).",urlCreds:"لم يُدرج الموقع: لا تقبل الروابط التي تتضمن بيانات دخول.",marketEmpty:"لم تُحدد أسواق؛ لن تُضاف تغطية عالمية.",noSignals:"لم تُكتشف أنماط رقمية في أول 100 كلمة. هذا لا يعني غياب الحقائق.",factsLabel:"إشارات مرشحة فقط — ليست حقائق متحققة",downloadName:"entity-truth",packOk:"تم تجهيز JSON-LD وملف llms.txt كمسودتين بناءً على مدخلاتك."},
+en:{eyebrow:"Independent, free and open-source helper",title:"Make your entity easier to describe to machines.",intro:"Run a small profile check and generate draft structured data and an entity brief. Everything runs in your browser; your data is not sent to a server.",formTitle:"Entity information",nameLabel:"Company or brand name *",namePh:"Example Company",urlLabel:"Official website (optional)",descriptionLabel:"Short description (optional)",descPh:"What does the organization offer, to whom, and in which sector?",textLabel:"Opening text to inspect",textPh:"Paste the opening section of your website or company profile...",textHelp:"Only the first 100 words are checked for numeric, date and standard patterns. Their truth is not verified.",marketsLabel:"Markets served (optional)",marketsPh:"Iraq, UAE, Germany",marketsHelp:"Separate markets with commas. Worldwide coverage is never assumed.",languagesLabel:"Entity languages (not tool languages)",aliasesLabel:"Alternate names (optional)",aliasesPh:"Short name, trading name",run:"Check entity",localOnly:"Local-only · no crawling or API",resultTitle:"Initial check",empty:"Enter entity details and select “Check entity”. Nothing is sent to the internet.",words:"Words scanned / 100",signals:"Candidate signals",nameHintLabel:"Name hint",signalsTitle:"Detected candidate signals",packTitle:"Draft entity pack",disclaimer:"This is a preliminary helper. It does not verify facts or link ownership, and does not measure search or AI-answer visibility.",dlJsonld:"Download JSON-LD",dlLlms:"Download llms.txt",dlReport:"Download JSON report",nextTitle:"Need deeper analysis?",nextText:"This helper prepares a basic entity profile only. MAAROOF AI provides research, source verification, visibility measurement, competitor analysis, strategy and implementation.",nextLink:"Explore MAAROOF AI →",hintLow:"No clear hint",hintMid:"Review name clarity",hintHigh:"Generic or descriptive name",urlInvalid:"Website omitted: invalid URL or non-HTTP(S) scheme.",urlCreds:"Website omitted: URLs containing login credentials are not accepted.",marketEmpty:"No markets supplied; worldwide coverage is not added.",noSignals:"No numeric patterns were detected in the first 100 words. This does not mean facts are absent.",factsLabel:"Candidate signals only — not verified facts",downloadName:"entity-truth",packOk:"JSON-LD and llms.txt drafts are ready from your supplied information."},
+ku:{eyebrow:"ئامرازی سەربەخۆ و کراوەی خۆڕایی",title:"ناسنامەی کەسایەتی یان کۆمپانیاکەت ڕوونتر بکە.",intro:"پشکنینێکی سەرەتایی بۆ زانیارییەکان و دروستکردنی پڕۆفایلی پێکهاتەدار. هەموو شتێک لە وێبگەڕەکەتدا ئەنجام دەدرێت و هیچ داتایەک نانێردرێت.",formTitle:"زانیارییەکانی کەسایەتی",nameLabel:"ناوی کۆمپانیا یان براند *",namePh:"کۆمپانیای نموونە",urlLabel:"ماڵپەڕی فەرمی (ئارەزوومەندانە)",descriptionLabel:"پێناسەی کورت (ئارەزوومەندانە)",descPh:"کۆمپانیاکە چی پێشکەش دەکات و لە چ بوارێکدا؟",textLabel:"دەقی پێناسەیی بۆ پشکنین",textPh:"دەقی سەرەتایی ماڵپەڕەکەت لێرە دابنێ...",textHelp:"تەنها 100 وشەی یەکەم بۆ ژمارە و بەروار و ستاندارد دەپشکنێت؛ دروستیان پشتڕاست ناکاتەوە.",marketsLabel:"بازاڕەکانی خزمەتکراو (ئارەزوومەندانە)",marketsPh:"عێراق، ئیمارات، ئەڵمانیا",marketsHelp:"بازاڕەکان بە کۆما جیا بکەرەوە. جیهانیبوون بەخۆکارانە دانانرێت.",languagesLabel:"زمانەکانی کەسایەتی (نەک زمانی ئامراز)",aliasesLabel:"ناوی جێگرەوە (ئارەزوومەندانە)",aliasesPh:"ناوی کورت یان ناوی بازرگانی",run:"پشکنینی کەسایەتی",localOnly:"لە ناوخۆدا · بێ خەزاندن و API",resultTitle:"ئەنجامی پشکنینی سەرەتایی",empty:"زانیارییەکان بنووسە و دوگمەی پشکنین هەڵبژێرە. هیچ شتێک نانێردرێت.",words:"وشەی پشکنراو / 100",signals:"نیشانەی ئەگەری",nameHintLabel:"تێبینی ناو",signalsTitle:"نیشانە دۆزراوەکان",packTitle:"پاکێتی پڕۆفایلی پێشنیارکراو",disclaimer:"ئەمە ئامرازێکی سەرەتاییە؛ ڕاستی زانیاری و خاوەندارێتی لینکەکان پشتڕاست ناکاتەوە و دەرکەوتنی AI ناپێوێت.",dlJsonld:"داگرتنی JSON-LD",dlLlms:"داگرتنی llms.txt",dlReport:"داگرتنی ڕاپۆرتی JSON",nextTitle:"پێویستت بە شیکردنەوەی قووڵترە؟",nextText:"ئەم ئامرازە تەنها پڕۆفایلێکی سەرەتایی ئامادە دەکات. MAAROOF AI گەڕان، پشتڕاستکردنەوەی سەرچاوە، پێوانەکردنی دەرکەوتن، شیکردنەوەی ڕکابەر و ستراتیژی پێشکەش دەکات.",nextLink:"MAAROOF AI ببینە ←",hintLow:"ئاماژەیەکی ڕوون نییە",hintMid:"ڕوونی ناوەکە بپشکنە",hintHigh:"ناوەکە گشتی یان وەسفییە",urlInvalid:"ماڵپەڕ دانەنرا: بەستەرەکە نادروستە.",urlCreds:"ماڵپەڕ دانەنرا: بەستەری خاوەن زانیاری چوونەژوورەوە قبوڵ ناکرێت.",marketEmpty:"بازاڕ دیاری نەکراوە؛ داپۆشینی جیهانی زیاد ناکرێت.",noSignals:"لە 100 وشەی یەکەمدا نیشانەی ژمارەیی نەدۆزرایەوە. ئەمە بە مانای نەبوونی زانیاری نییە.",factsLabel:"تەنها نیشانەی ئەگەری — نەک ڕاستی پشتڕاستکراوە",downloadName:"entity-truth",packOk:"مسودەی JSON-LD و llms.txt ئامادە کرا."}
+};
+
+let ui = "ar";
+let last = null;
+const $ = (id) => document.getElementById(id);
+
+function setLang(lang) {
+  ui = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
+  document.querySelectorAll("[data-i]").forEach((el) => {
+    const key = el.dataset.i;
+    if (copy[lang][key]) el.textContent = copy[lang][key];
+  });
+  document.querySelectorAll("[data-ph]").forEach((el) => {
+    const key = el.dataset.ph;
+    if (copy[lang][key]) el.placeholder = copy[lang][key];
+  });
+  document.querySelectorAll(".lang").forEach((button) => {
+    button.classList.toggle("active", button.dataset.lang === lang);
+  });
+}
+
+function csvList(value) {
+  return value.split(/[,،؛;\n]+/).map((item) => item.trim()).filter(Boolean);
+}
+
+function download(name, content, type) {
+  const blob = new Blob([content], { type: type + ";charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = name;
+  anchor.click();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+document.querySelectorAll(".lang").forEach((button) => {
+  button.addEventListener("click", () => setLang(button.dataset.lang));
+});
+
+$("entityForm").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const translations = copy[ui];
+  const name = $("name").value.trim();
+  if (!name) return;
+
+  const entityLanguages = [...document.querySelectorAll(".entityLanguage:checked")].map((item) => item.value);
+  const result = auditEntity({
+    name,
+    url: $("url").value.trim() || undefined,
+    description: $("description").value.trim() || undefined,
+    headText: $("headText").value.trim() || undefined,
+    markets: csvList($("markets").value),
+    aliases: csvList($("aliases").value),
+    knowsLanguages: entityLanguages,
+    lang: ui
+  });
+
+  last = result;
+  const risk = result.disambiguation.heuristicRisk;
+  const nameHint = risk === "high"
+    ? translations.hintHigh
+    : risk === "medium"
+      ? translations.hintMid
+      : risk === "unknown"
+        ? translations.hintMid
+        : translations.hintLow;
+
+  const localizedWarnings = result.machinePack.warnings.map((warning) => {
+    if (warning.includes("without credentials")) return translations.urlCreds;
+    if (warning.includes("invalid absolute URL")) return translations.urlInvalid;
+    if (warning.includes("Worldwide coverage is not assumed")) return translations.marketEmpty;
+    return warning;
+  });
+
+  $("empty").style.display = "none";
+  $("results").classList.add("show");
+  $("wordCount").textContent = String(result.factDensity.totalWordsAnalyzed);
+  $("signalCount").textContent = String(result.factDensity.candidateSignalCount);
+  $("nameHint").textContent = nameHint;
+
+  const signalList = $("signalsList");
+  signalList.replaceChildren();
+  if (!result.factDensity.candidateSignals.length) {
+    const item = document.createElement("li");
+    item.textContent = translations.noSignals;
+    signalList.append(item);
+  } else {
+    for (const signal of result.factDensity.candidateSignals) {
+      const item = document.createElement("li");
+      const label = document.createElement("span");
+      label.className = "pill";
+      label.textContent = signal.category;
+      item.append(label, document.createTextNode(signal.value));
+      signalList.append(item);
+    }
+  }
+
+  const packList = $("packList");
+  packList.replaceChildren();
+  for (const message of [translations.packOk, translations.factsLabel, ...localizedWarnings]) {
+    const item = document.createElement("li");
+    item.textContent = message;
+    packList.append(item);
+  }
+});
+
+$("dlJsonld").addEventListener("click", () => {
+  if (last) download("organization.jsonld", JSON.stringify(last.machinePack.jsonLd, null, 2), "application/ld+json");
+});
+$("dlLlms").addEventListener("click", () => {
+  if (last) download("llms.txt", last.machinePack.llmsTxt, "text/plain");
+});
+$("dlReport").addEventListener("click", () => {
+  if (last) download("entity-audit.json", JSON.stringify(last, null, 2), "application/json");
+});
+
+setLang("ar");
+</script>
+</body>
+</html>

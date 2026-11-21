@@ -1,0 +1,67 @@
+{
+  "name": "@maaroof/entity-truth-core",
+  "version": "0.1.0",
+  "description": "Local entity profile inspection, JSON-LD draft generation, and MCP tools.",
+  "license": "MIT",
+  "author": "Ahmed Maaroof",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "entity-truth": "./dist/cli.js",
+    "entity-truth-mcp": "./dist/mcp/server.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "skills",
+    "docs"
+  ],
+  "scripts": {
+    "clean": "node -e \"import('node:fs/promises').then(fs => fs.rm('dist', { recursive: true, force: true }))\"",
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "check": "npm test",
+    "prepare:pages": "node scripts/prepare-pages.mjs",
+    "mcp": "node dist/mcp/server.js",
+    "prepack": "npm run build"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahmedfouaadqi-glitch/entity-truth-core-by-MAAROOF-AI.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ahmedfouaadqi-glitch/entity-truth-core-by-MAAROOF-AI/issues"
+  },
+  "homepage": "https://github.com/ahmedfouaadqi-glitch/entity-truth-core-by-MAAROOF-AI",
+  "keywords": [
+    "entity-intelligence",
+    "schema-org",
+    "json-ld",
+    "llms-txt",
+    "mcp",
+    "agent-skills",
+    "arabic",
+    "sorani-kurdish",
+    "maaroof-ai"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.4.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^6.0.0",
+    "@modelcontextprotocol/client": "^2.4.0"
+  }
+}

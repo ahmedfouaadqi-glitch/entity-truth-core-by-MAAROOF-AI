@@ -1,0 +1,6 @@
+[build]
+  command = "npm install --no-audit --no-fund && npm run build && npm run prepare:pages"
+  publish = "_site"
+
+[build.environment]
+  NODE_VERSION = "22"
