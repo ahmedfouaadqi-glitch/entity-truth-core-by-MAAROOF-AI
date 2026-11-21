@@ -31,6 +31,7 @@ This utility prepares. It does not investigate. Signals and scores are heuristic
 - CODEOWNERS is included. GitHub branch and tag rulesets must also be enabled by the owner; see docs/REPOSITORY_OWNERSHIP.md.
 - The project is MIT-licensed. Users may modify and redistribute their own copies or forks under that license. Such forks do not modify or become official releases of this repository.
 - The playground is not hosted by MAAROOF AI for users. Each user builds and deploys it using their own GitHub Pages, Cloudflare Pages, Netlify or static hosting account. See docs/DEPLOYMENT.md.
+- Product boundaries and the current development roadmap are defined in [docs/PRODUCT_SCOPE.md](docs/PRODUCT_SCOPE.md) and [docs/DEVELOPMENT_ROADMAP.md](docs/DEVELOPMENT_ROADMAP.md). Contributions must follow [CONTRIBUTING.md](CONTRIBUTING.md).
 - There is no central backend, database, telemetry or subscription requirement.
 
 ## Requirements
