@@ -12,56 +12,63 @@ MIT permits users to modify and redistribute their own copies and forks. It cann
 
 `.github/CODEOWNERS` assigns all repository paths to `@ahmedfouaadqi-glitch`. This creates a code-owner review request only when the relevant branch ruleset requires code-owner review; CODEOWNERS alone does not block writes or merges.
 
-## Required GitHub rulesets
+## Ruleset status
 
-The GitHub connector used for this change does not expose the repository ruleset settings API. Apply and verify these controls in the repository owner's GitHub account.
+The owner has created and enabled this active branch ruleset:
 
-### 1. Owner-only official branches
+- Name: `MAAROOF - Owner Control - All Branches`
+- Target: all branches (`~ALL`)
+- Rules: restrict creation, updates and deletion; block non-fast-forward updates (force pushes).
+- Bypass: only the GitHub user `ahmedfouaadqi-glitch`, with `Always` bypass mode.
 
-1. Open **Settings → Rules → Rulesets → New ruleset → New branch ruleset**.
-2. Set enforcement status to **Active**.
-3. Under branch targeting, select **Include all branches**. This is important: targeting only `main` does not protect development branches.
-4. Add **Restrict creations**, **Restrict updates**, and **Restrict deletions**.
-5. In the bypass list, allow only the repository administrator role. Do not add teams, GitHub Apps, maintainers or outside collaborators.
-6. Open **Settings → Collaborators and teams** and verify that the repository owner is the only account with Admin permission. Remove any other Admin, Maintain or Write access that is not explicitly required.
-7. Save and verify the ruleset shows **Active** and targets all branches.
+GitHub's Rulesets API confirmed the rule's active state, all-branches target, enabled rule types and user-specific bypass actor. The connected GitHub integration does not expose ruleset write operations, so additional rulesets must be created in GitHub Settings.
 
-With the update restriction enabled, only actors in the ruleset bypass list can push to matching branches. If repository admins other than the owner remain, they may also bypass the rule; therefore step 6 is required.
+## Remaining GitHub controls
+
+### 1. Verify account permissions
+
+Open **Settings → Collaborators and teams** and verify:
+
+- `ahmedfouaadqi-glitch` is the repository owner and has Admin permission.
+- No unapproved account has Admin, Maintain or Write permission.
+- Remove any access that is not explicitly required.
+
+The connected GitHub integration can verify the authenticated owner's Admin permission, but it cannot enumerate the repository's collaborator list. Do not claim that the owner is the only administrator until this list is checked in GitHub Settings.
 
 ### 2. Main branch review gates
 
 Create a separate active branch ruleset targeting only `main`:
 
+- Name: `MAAROOF - Protect Main - PR and CI`.
 - Require a pull request before merging.
-- Require at least one approval.
+- Require at least one approving review.
 - Require review from Code Owners.
-- Require the CI check for the Node 20 / Node 22 verification workflow.
+- Require both CI job checks: `Verify on Node 20` and `Verify on Node 22`.
 - Block force pushes.
 - Restrict deletion.
-- Keep bypass permissions limited to the repository administrator role; verify the owner is the only administrator.
+- Leave the bypass list empty so the PR and CI requirements also apply to the owner.
 
-The owner may use the approved administrative bypass when a direct owner-controlled correction is necessary. Normal changes should still use a pull request and CI.
+**Reviewer constraint:** a pull request author cannot approve their own pull request. Because the current CODEOWNERS entry names the repository owner, an owner-authored PR needs an independent reviewer to satisfy the one-approval and Code Owner review requirements. Do not weaken or bypass these gates merely to merge an owner-authored PR; arrange a trusted independent review.
 
 ### 3. Official version tags
 
-Create an active tag ruleset targeting `v*`:
+Create an active tag ruleset:
 
-- Restrict creations.
-- Restrict updates.
-- Restrict deletions.
-- Allow bypass only to the repository administrator role.
-- Verify the owner is the only repository administrator.
+- Name: `MAAROOF - Protect Official Version Tags`.
+- Target tag pattern: `v*`.
+- Restrict creations, updates and deletions.
+- Add only the GitHub user `ahmedfouaadqi-glitch` to the bypass list with `Always` mode.
 
-This protects official version tags from being created, moved or deleted by ordinary collaborators.
+This allows the owner to publish and manage official version tags while preventing other users with repository write access from creating, moving or deleting official `v*` tags.
 
 ## Verification checklist
 
-- [ ] An active branch ruleset targets all branches.
-- [ ] Restrict creations, updates and deletions are enabled for all branches.
-- [ ] Only the owner account has Admin permission.
-- [ ] No unapproved account has Maintain or Write permission.
-- [ ] An active `main` ruleset requires PR, Code Owner review and CI.
+- [x] An active branch ruleset targets all branches.
+- [x] Restrict creations, updates and deletions are enabled for all branches.
+- [x] The owner user is the only bypass actor in that ruleset.
+- [ ] Repository collaborators and teams reviewed; no unauthorized Admin, Maintain or Write access remains.
+- [ ] An active `main` ruleset requires PR, one approval, Code Owner review and both CI checks.
 - [ ] An active `v*` tag ruleset restricts tag creation, update and deletion.
-- [ ] The owner has verified the rulesets are active, not disabled or in Evaluate mode.
+- [ ] All rulesets verified as Active, not Disabled or Evaluate.
 
-Until the account permissions and active rulesets above are verified in GitHub Settings, this repository must not be described as fully protected. The current pull request therefore remains Draft and unmerged.
+Until the remaining collaborator-permission, `main` and `v*` controls are verified, the repository must not be described as fully protected. The implementation pull request therefore remains Draft and unmerged.
