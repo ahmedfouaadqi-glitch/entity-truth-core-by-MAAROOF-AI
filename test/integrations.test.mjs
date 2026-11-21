@@ -104,3 +104,13 @@ test("browser playground has localized labels for contact candidate categories",
   assert.match(html, /email:"ئیمەیڵ"/);
   assert.match(html, /signalLabels\[ui\]\[signal\.category\]/);
 });
+
+
+test("MCP profile generation preserves supplied multilingual alternate names",()=>{
+  const result=executeEntityProfileGenerate({
+    name:"شركة المثال",
+    aliases:["Example LLC","کۆمپانیای نموونە"],
+    lang:"ar"
+  });
+  assert.deepEqual(result.jsonLd.alternateName,["Example LLC","کۆمپانیای نموونە"]);
+});
