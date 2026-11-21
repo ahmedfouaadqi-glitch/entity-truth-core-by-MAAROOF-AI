@@ -1,15 +1,24 @@
 ---
 name: entity-truth-core
-description: Inspect a user-supplied organization or brand profile, identify candidate signals in its first 100 words, generate draft Schema.org Organization JSON-LD and an llms.txt-style profile, or structurally check generated JSON-LD. Use only when the user asks to prepare or review a basic entity profile.
+description: Prepare a user-supplied organization or brand profile locally, scan 100 or 500 words or all supplied text for candidate patterns, generate draft Schema.org Organization JSON-LD and llms.txt-style text, or structurally check generated JSON-LD. Does not research or verify external facts.
 ---
 
 # Entity Truth Core
 
-Use this skill to prepare a basic, machine-readable entity profile with deterministic local functions. The tool is not a research engine, crawler, fact checker, trademark search, ranking system, or AI-visibility measurement service.
+Use this skill only to prepare a basic machine-readable entity profile from information supplied by the user. The tool is not a research engine, crawler, fact checker, trademark search, ranking system, or AI-visibility measurement service.
+
+## Non-negotiable product boundaries
+
+1. Process supplied text and fields locally. Do not browse, fetch websites, crawl sources, query registries, or compare inputs with external data.
+2. Do not add an external verification mode, even as an opt-in feature, to this project.
+3. Do not call MAAROOF AI production APIs, models, tools, orchestration, databases, credentials, or hosted services.
+4. Do not add AI model calls, search/GEO/SEO/AEO measurement, competitor analysis, market research, strategic recommendations, monitoring, or prediction.
+5. Treat all detected patterns and user-supplied facts, URLs, markets, and profiles as unverified input. Do not imply that URL syntax proves ownership.
+6. Keep outputs as drafts. A local structural check is not proof of factual accuracy or complete Schema.org conformance.
 
 ## Before using the tool
 
-1. Confirm the entity name and use only details supplied by the user or explicitly authorized source material.
+1. Confirm the entity name and use only details supplied by the user or explicitly authorized local input.
 2. Do not infer worldwide coverage, served markets, entity languages, official profiles, awards, certifications, dates, metrics, or legal status.
 3. Keep user-provided claims labelled as user-provided and unverified.
 4. Prefer the MCP tools when the Entity Truth Core MCP server is configured.
@@ -17,12 +26,12 @@ Use this skill to prepare a basic, machine-readable entity profile with determin
 
 ## Available MCP tools
 
-- `entity_scan`: run the complete local audit, including the first-100-word candidate scan, limited name hint, and generated draft profile.
+- `entity_scan`: run the complete local audit, including the selectable 100-word, 500-word, or full-text candidate scan, limited name hint, and draft profile.
 - `entity_name_hint`: run the small static word-list heuristic for Arabic, Sorani Kurdish, or English.
 - `entity_profile_generate`: generate draft Organization JSON-LD and llms.txt-style text from supplied fields.
 - `entity_profile_validate`: perform a limited structural check of an Organization JSON-LD object.
 
-Pass `lang` as `ar`, `ku`, or `en`. Pass `markets`, `knowsLanguages`, `aliases`, `officialProfiles`, and `facts` only when the user has supplied them. Do not add empty or invented values.
+Pass `window` as `100`, `500`, or `"full"`; the default is `100`. Pass `lang` as `ar`, `ku`, or `en`. Pass `markets`, `knowsLanguages`, `aliases`, `officialProfiles`, and `facts` only when the user has supplied them. Do not add empty or invented values.
 
 ## Interpreting results
 
@@ -38,15 +47,15 @@ Pass `lang` as `ar`, `ku`, or `en`. Pass `markets`, `knowsLanguages`, `aliases`,
 From a local checkout, build the project and run:
 
 ```bash
-npm install
+npm ci
 npm run build
-node dist/cli.js "Example Organization" --text "User-supplied opening text" --lang en --out-dir ./entity-profile
+node dist/cli.js "Example Organization" --text "User-supplied opening text" --lang en --window 500 --out-dir ./entity-profile
 ```
 
-The CLI writes local files only. It refuses to overwrite existing output unless the user explicitly supplies `--force`.
+Choose `--window 100`, `--window 500`, or `--window full`. The default is `100`. The CLI writes local files only. It refuses to overwrite existing output unless the user explicitly supplies `--force`.
 
 ## Privacy and boundaries
 
 The MCP server uses local standard input/output (stdio). It does not start an HTTP listener, call a hosted MAAROOF AI service, access credentials, fetch websites, or transmit entity data. Do not expose user data to another service as part of this skill.
 
-This utility prepares. It does not investigate. Refer users to independent research workflows when they need source verification, global name-collision research, competitor analysis, strategy, or continuous monitoring.
+This utility prepares. It does not investigate. Do not use it as a substitute for external source verification, research, competitor analysis, strategy, or continuous monitoring; those functions are outside this project's scope.
