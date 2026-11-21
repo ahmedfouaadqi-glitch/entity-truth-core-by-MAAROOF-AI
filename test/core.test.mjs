@@ -190,3 +190,32 @@ test("RTL and LTR text preserves original detected email and year values", () =>
   assert.ok(report.candidateSignals.some((signal) => signal.category === "year" && signal.value === "٢٠٢٠"));
   assert.ok(report.candidateSignals.some((signal) => signal.category === "email" && signal.value === "info@example.org"));
 });
+
+
+test("Arabic legal-form and organization words produce cautious name hints",()=>{
+  const result=checkDisambiguation("شركة المثال","ar");
+  assert.equal(result.heuristicRisk,"medium");
+  assert.ok(result.matchedCommonTerms.includes("شركة"));
+  assert.match(result.recommendation,/not an ownership or uniqueness assessment/i);
+});
+
+test("Sorani organization words produce cautious name hints",()=>{
+  const result=checkDisambiguation("کۆمپانیای نموونە","ku");
+  assert.equal(result.heuristicRisk,"medium");
+  assert.ok(result.matchedCommonTerms.includes("کۆمپانیای"));
+});
+
+test("English legal suffixes produce cautious name hints",()=>{
+  const result=checkDisambiguation("Example Holdings LLC","en");
+  assert.equal(result.heuristicRisk,"medium");
+  assert.ok(result.matchedCommonTerms.includes("llc"));
+});
+
+test("user-supplied Arabic and Latin aliases remain draft alternateName values",()=>{
+  const pack=generateMachinePack({
+    name:"شركة المثال",
+    aliases:["Example Company LLC","  شركة المثال التجارية  ","Example Company LLC"]
+  });
+  assert.deepEqual(pack.jsonLd.alternateName,["Example Company LLC","شركة المثال التجارية"]);
+  assert.ok(pack.warnings.every(warning=>! /verified|official ownership/i.test(warning) || /not independently verified|not verified/i.test(warning)));
+});
