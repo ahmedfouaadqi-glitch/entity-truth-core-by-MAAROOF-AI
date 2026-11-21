@@ -111,7 +111,8 @@ export function calculateFactDensity(text:string,lang:SupportedLang="en",window:
   const addSignal=(category:FactSignal["category"],startIndex:number,length:number)=>{
     const start=mapped.sourceStart[startIndex]??0;
     const end=mapped.sourceEnd[startIndex+length-1]??start;
-    const value=snippet.slice(start,end).trim().replace(/^[^\p{L}\p{N}$€£]+/u,"");
+    const rawValue=snippet.slice(start,end).trim();
+    const value=category==="telephone" ? rawValue : rawValue.replace(/^[^\p{L}\p{N}$€£]+/u,"");
     if(value) signals.push({category,value});
   };
   const patterns:Array<[FactSignal["category"],RegExp]>=[
