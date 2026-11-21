@@ -10,6 +10,13 @@
 
 ## Unreleased — local agent and self-hosting milestone
 
+### Scope and local scan window
+
+- Locked the product boundary to local entity-profile preparation; external fact verification, crawling, source comparison, ranking/visibility measurement and MAAROOF AI production integration remain out of scope.
+- Added selectable 100-word, 500-word and full-text local scan windows; 100 words remains the default for backwards-compatible behavior.
+- Exposed the same scan-window setting through the TypeScript API, CLI, local MCP server and browser playground.
+- Added regression coverage for scan-window boundaries, CLI parsing, API propagation and MCP stdio invocation.
+
 - Added a local MCP stdio server with entity scan, name hint, profile generation and structural validation tools.
 - Added a limited Organization JSON-LD structural validator; it does not replace full Schema.org validation.
 - Added canonical Agent Skill instructions and Codex / Claude Code discovery copies.
