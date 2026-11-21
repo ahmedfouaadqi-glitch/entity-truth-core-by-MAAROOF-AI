@@ -23,6 +23,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install --no-audit --no-fund
+      - uses: actions/upload-artifact@v4
+        with:
+          name: npm-lockfile-node-${{ matrix.node-version }}
+          path: package-lock.json
+          if-no-files-found: error
       - run: npm test
       - run: npm run prepare:pages
       - run: npm pack --dry-run
