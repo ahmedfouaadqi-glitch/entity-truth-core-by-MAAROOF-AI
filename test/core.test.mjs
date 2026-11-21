@@ -1,0 +1,22 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
+import { mkdtempSync, writeFileSync, existsSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
+import { auditEntity, calculateFactDensity, checkDisambiguation, generateMachinePack } from "../dist/index.js";
+
+test("scans no more than first 100 lexical words",()=>{const first=Array.from({length:100},(_,i)=>"word"+i).join(" ");const r=calculateFactDensity(first+" 2024 88%","en");assert.equal(r.totalWordsAnalyzed,100);assert.equal(r.candidateSignalCount,0);});
+test("detects candidate signals in English",()=>{const r=calculateFactDensity("Founded in 2018, 35% growth, ISO 9001, serving 4 countries and USD 2500.","en");assert.ok(r.candidateSignalCount>=4);});
+test("detects candidate signals in Arabic",()=>{const r=calculateFactDensity("تأسست عام 2020 وتخدم 5 دول ونمو 25% ومعيار ISO 9001","ar");assert.ok(r.candidateSignalCount>=3);});
+test("detects candidate signals in Sorani Kurdish",()=>{const r=calculateFactDensity("لە ساڵی 2022 دامەزراوە و 5 وڵات و 20% گەشە","ku");assert.ok(r.candidateSignalCount>=2);});
+test("de-duplicates repeated patterns",()=>{const r=calculateFactDensity("2018 2018 2018 40% 40%","en");assert.equal(r.candidateSignals.filter(x=>x.category==="year").length,1);assert.equal(r.candidateSignals.filter(x=>x.category==="percentage").length,1);});
+test("name hints explicitly use a limited lexicon",()=>{const r=checkDisambiguation("معروف","ar");assert.equal(r.heuristicRisk,"high");assert.equal(r.lexiconCoverage,"limited-static-lexicon");});
+test("short names are flagged as a heuristic only",()=>{assert.equal(checkDisambiguation("ABC","en").heuristicRisk,"medium");});
+test("audit rejects missing names and unsupported languages",()=>{assert.throws(()=>auditEntity({name:" "}),/Entity name is required/);assert.throws(()=>auditEntity({name:"Example",lang:"fr"}),/Unsupported language/);});
+test("does not invent Worldwide coverage",()=>{const r=generateMachinePack({name:"Example"});assert.equal("areaServed" in r.jsonLd,false);assert.match(r.warnings.join(" "),/Worldwide coverage is not assumed/);});
+test("rejects unsafe website URLs",()=>{const r=generateMachinePack({name:"Example",url:"javascript:alert(1)"});assert.equal("url" in r.jsonLd,false);});
+test("labels user facts as unverified",()=>{const r=generateMachinePack({name:"Example",facts:["Founded in 2010"]});assert.match(r.llmsTxt,/not independently verified/);});
+test("preserves explicit markets and language without assumptions",()=>{const r=generateMachinePack({name:"Example",markets:["Iraq"],knowsLanguages:["ar","en"]});assert.deepEqual(r.jsonLd.knowsLanguage,["ar","en"]);assert.equal(Array.isArray(r.jsonLd.areaServed),true);});
+test("CLI exports three files and refuses overwrite by default",()=>{const d=mkdtempSync(join(tmpdir(),"entity-truth-"));try{const args=[resolve("dist/cli.js"),"Example Entity","--out-dir",d];execFileSync(process.execPath,args);assert.ok(existsSync(join(d,"audit-report.json")));assert.ok(existsSync(join(d,"organization.jsonld")));assert.ok(existsSync(join(d,"llms.txt")));assert.throws(()=>execFileSync(process.execPath,args),/Refusing to overwrite/);execFileSync(process.execPath,[...args,"--force"]);}finally{rmSync(d,{recursive:true,force:true});}});
+test("CLI reads JSON input preserving Arabic language",()=>{const d=mkdtempSync(join(tmpdir(),"entity-truth-json-"));try{const f=join(d,"entity.json");writeFileSync(f,JSON.stringify({name:"شركة المثال",headText:"تأسست عام 2020",lang:"ar"}));const out=execFileSync(process.execPath,[resolve("dist/cli.js"),"--input",f,"--json"],{encoding:"utf8"});assert.equal(JSON.parse(out).language,"ar");}finally{rmSync(d,{recursive:true,force:true});}});
