@@ -83,6 +83,12 @@ en:{eyebrow:"Independent, free and open-source helper",title:"Make your entity e
 ku:{eyebrow:"ئامرازی سەربەخۆ و کراوەی خۆڕایی",title:"ناسنامەی کەسایەتی یان کۆمپانیاکەت ڕوونتر بکە.",intro:"پشکنینێکی سەرەتایی بۆ زانیارییەکان و دروستکردنی پڕۆفایلی پێکهاتەدار. هەموو شتێک لە وێبگەڕەکەتدا ئەنجام دەدرێت و هیچ داتایەک نانێردرێت.",formTitle:"زانیارییەکانی کەسایەتی",nameLabel:"ناوی کۆمپانیا یان براند *",namePh:"کۆمپانیای نموونە",urlLabel:"ماڵپەڕی فەرمی (ئارەزوومەندانە)",descriptionLabel:"پێناسەی کورت (ئارەزوومەندانە)",descPh:"کۆمپانیاکە چی پێشکەش دەکات و لە چ بوارێکدا؟",textLabel:"دەقی پێناسەیی بۆ پشکنین",textPh:"دەقی سەرەتایی ماڵپەڕەکەت لێرە دابنێ...",textHelp:"دەقی پێدراو لە ناوخۆدا شیکاری دەکرێت؛ هیچ زانیارییەک پشتڕاست ناکرێتەوە.",marketsLabel:"بازاڕەکانی خزمەتکراو (ئارەزوومەندانە)",marketsPh:"عێراق، ئیمارات، ئەڵمانیا",marketsHelp:"بازاڕەکان بە کۆما جیا بکەرەوە. جیهانیبوون بەخۆکارانە دانانرێت.",languagesLabel:"زمانەکانی کەسایەتی (نەک زمانی ئامراز)",aliasesLabel:"ناوی جێگرەوە (ئارەزوومەندانە)",aliasesPh:"ناوی کورت یان ناوی بازرگانی",run:"پشکنینی کەسایەتی",localOnly:"لە ناوخۆدا · بێ خەزاندن و API",resultTitle:"ئەنجامی پشکنینی سەرەتایی",empty:"زانیارییەکان بنووسە و دوگمەی پشکنین هەڵبژێرە. هیچ شتێک نانێردرێت.",words:"وشەی پشکنراو / {limit}",allText:"هەموو دەقی پێدراو",firstWords:"{count} وشەی یەکەم",windowLabel:"قەبارەی پشکنین",window100:"100 وشە",window500:"500 وشە",windowFull:"تەواوی دەق",windowHelp:"{window} بە شێوەی ناوخۆیی شیکاری دەکرێت بۆ دۆزینەوەی نیشانەی ئەگەری؛ دروستییان پشتڕاست ناکرێتەوە.",signals:"نیشانەی ئەگەری",nameHintLabel:"تێبینی ناو",signalsTitle:"نیشانە دۆزراوەکان",packTitle:"پاکێتی پڕۆفایلی پێشنیارکراو",disclaimer:"ئەمە ئامرازێکی سەرەتاییە؛ ڕاستی زانیاری و خاوەندارێتی لینکەکان پشتڕاست ناکاتەوە و دەرکەوتنی AI ناپێوێت.",dlJsonld:"داگرتنی JSON-LD",dlLlms:"داگرتنی llms.txt",dlReport:"داگرتنی ڕاپۆرتی JSON",nextTitle:"پێویستت بە شیکردنەوەی قووڵترە؟",nextText:"ئەم ئامرازە تەنها پڕۆفایلێکی سەرەتایی ئامادە دەکات. MAAROOF AI گەڕان، پشتڕاستکردنەوەی سەرچاوە، پێوانەکردنی دەرکەوتن، شیکردنەوەی ڕکابەر و ستراتیژی پێشکەش دەکات.",nextLink:"MAAROOF AI ببینە ←",hintLow:"ئاماژەیەکی ڕوون نییە",hintMid:"ڕوونی ناوەکە بپشکنە",hintHigh:"ناوەکە گشتی یان وەسفییە",urlInvalid:"ماڵپەڕ دانەنرا: بەستەرەکە نادروستە.",urlCreds:"ماڵپەڕ دانەنرا: بەستەری خاوەن زانیاری چوونەژوورەوە قبوڵ ناکرێت.",marketEmpty:"بازاڕ دیاری نەکراوە؛ داپۆشینی جیهانی زیاد ناکرێت.",noSignals:"لە {window}دا نیشانەی ژمارەیی نەدۆزرایەوە. ئەمە بە مانای نەبوونی زانیاری نییە.",factsLabel:"تەنها نیشانەی ئەگەری — نەک ڕاستی پشتڕاستکراوە",downloadName:"entity-truth",packOk:"مسودەی JSON-LD و llms.txt ئامادە کرا."}
 };
 
+const signalLabels = {
+  ar: {year:"سنة",percentage:"نسبة",standard:"معيار",scale:"عدد أو نطاق",currency:"عملة",email:"بريد إلكتروني",telephone:"هاتف",address:"عنوان",service:"خدمات"},
+  en: {year:"Year",percentage:"Percentage",standard:"Standard",scale:"Scale",currency:"Currency",email:"Email",telephone:"Telephone",address:"Address",service:"Services"},
+  ku: {year:"ساڵ",percentage:"ڕێژە",standard:"ستاندارد",scale:"ژمارە یان قەبارە",currency:"دراو",email:"ئیمەیڵ",telephone:"تەلەفۆن",address:"ناونیشان",service:"خزمەتگوزاری"}
+};
+
 let ui = "ar";
 let last = null;
 const $ = (id) => document.getElementById(id);
@@ -185,7 +191,7 @@ $("entityForm").addEventListener("submit", (event) => {
       const item = document.createElement("li");
       const label = document.createElement("span");
       label.className = "pill";
-      label.textContent = signal.category;
+      label.textContent = signalLabels[ui][signal.category] ?? signal.category;
       item.append(label, document.createTextNode(signal.value));
       signalList.append(item);
     }
