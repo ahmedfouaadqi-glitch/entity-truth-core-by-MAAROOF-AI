@@ -94,3 +94,13 @@ test("browser playground exposes the same 100, 500 and full scan windows", async
   assert.match(html, /option value="full"/);
   assert.match(html, /window:\s*\$\("window"\)/);
 });
+
+
+test("browser playground has localized labels for contact candidate categories", async () => {
+  const html = await readFile(new URL("../playground/index.html", import.meta.url), "utf8");
+  assert.match(html, /signalLabels\s*=\s*\{/);
+  assert.match(html, /email:"بريد إلكتروني"/);
+  assert.match(html, /email:"Email"/);
+  assert.match(html, /email:"ئیمەیڵ"/);
+  assert.match(html, /signalLabels\[ui\]\[signal\.category\]/);
+});
