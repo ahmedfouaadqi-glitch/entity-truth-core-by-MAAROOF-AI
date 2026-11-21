@@ -11,7 +11,7 @@ npm install
 npm run build
 ```
 
-The MCP entry point is `dist/mcp/server.js`. It uses stdio and does not open a network port.
+The MCP entry point is `dist/mcp/server.js`. It uses stdio and does not open a network port. Entity scans accept the optional `window` value `100`, `500`, or `full`; the default is `100`.
 
 ## 2. OpenAI Codex
 
@@ -77,7 +77,7 @@ A language model without an agent runtime, MCP client, filesystem access, or com
 | `entity_profile_generate` | Draft Organization JSON-LD and llms.txt-style text |
 | `entity_profile_validate` | Limited local structural check of Organization JSON-LD |
 
-All inputs are processed locally. The server does not implement remote HTTP transport in this release.
+The `entity_scan` tool accepts `window: 100`, `window: 500`, or `window: "full"`. All inputs are processed locally. The server does not implement remote HTTP transport in this release.
 
 ## 6. User-level skill installation
 
