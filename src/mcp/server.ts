@@ -3,6 +3,7 @@ import { McpServer } from "@modelcontextprotocol/server";
 import { serveStdio } from "@modelcontextprotocol/server/stdio";
 import { z } from "zod";
 import { executeEntityNameHint, executeEntityProfileGenerate, executeEntityProfileValidate, executeEntityScan } from "./tools.js";
+import type { EntityInput, SupportedLang } from "../types.js";
 
 const entityInputSchema = z.object({
   name: z.string().trim().min(1).max(200),
@@ -16,6 +17,23 @@ const entityInputSchema = z.object({
   facts: z.array(z.string().max(2000)).max(100).optional(),
   lang: z.enum(["ar", "ku", "en"]).optional(),
 });
+
+type EntityInputSchema = z.infer<typeof entityInputSchema>;
+
+function toEntityInput(input: EntityInputSchema): EntityInput {
+  return {
+    name: input.name,
+    ...(input.url !== undefined ? { url: input.url } : {}),
+    ...(input.description !== undefined ? { description: input.description } : {}),
+    ...(input.headText !== undefined ? { headText: input.headText } : {}),
+    ...(input.aliases !== undefined ? { aliases: input.aliases } : {}),
+    ...(input.knowsLanguages !== undefined ? { knowsLanguages: input.knowsLanguages } : {}),
+    ...(input.markets !== undefined ? { markets: input.markets } : {}),
+    ...(input.officialProfiles !== undefined ? { officialProfiles: input.officialProfiles } : {}),
+    ...(input.facts !== undefined ? { facts: input.facts } : {}),
+    ...(input.lang !== undefined ? { lang: input.lang as SupportedLang } : {}),
+  };
+}
 
 function textResult(value: unknown) {
   return {
@@ -53,7 +71,7 @@ export function createEntityTruthMcpServer() {
       description: "Run the complete local Entity Truth Core audit: first-100-word candidate scan, limited name hint, and draft machine-readable profile. No network calls or independent fact verification.",
       inputSchema: entityInputSchema,
     },
-    async (input) => safelyRun(() => executeEntityScan(input)),
+    async (input) => safelyRun(() => executeEntityScan(toEntityInput(input))),
   );
 
   server.registerTool(
@@ -65,7 +83,10 @@ export function createEntityTruthMcpServer() {
         lang: z.enum(["ar", "ku", "en"]).optional(),
       }),
     },
-    async (input) => safelyRun(() => executeEntityNameHint(input)),
+    async (input) => safelyRun(() => executeEntityNameHint({
+      name: input.name,
+      ...(input.lang !== undefined ? { lang: input.lang as SupportedLang } : {}),
+    })),
   );
 
   server.registerTool(
@@ -74,7 +95,7 @@ export function createEntityTruthMcpServer() {
       description: "Generate draft Schema.org Organization JSON-LD and an llms.txt-style profile only from user-supplied fields. Supplied facts, markets and links are not independently verified.",
       inputSchema: entityInputSchema,
     },
-    async (input) => safelyRun(() => executeEntityProfileGenerate(input)),
+    async (input) => safelyRun(() => executeEntityProfileGenerate(toEntityInput(input))),
   );
 
   server.registerTool(
