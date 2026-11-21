@@ -77,7 +77,7 @@ A language model without an agent runtime, MCP client, filesystem access, or com
 | `entity_profile_generate` | Draft Organization JSON-LD and llms.txt-style text |
 | `entity_profile_validate` | Limited local structural check of Organization JSON-LD |
 
-The `entity_scan` tool accepts `window: 100`, `window: 500`, or `window: "full"`. All inputs are processed locally. The server does not implement remote HTTP transport in this release.
+The `entity_scan` tool accepts `window: 100`, `window: 500`, or `window: "full"`. The local scanner can surface candidate years, percentages, standards, scale, currencies, email addresses, formatted/labelled phone numbers, labelled addresses and labelled service lists. These are not validated. All inputs are processed locally. The server does not implement remote HTTP transport in this release.
 
 ## 6. User-level skill installation
 
