@@ -76,3 +76,11 @@ test("browser playground consumes the shared TypeScript build instead of duplica
   assert.doesNotMatch(html, /function\s+(?:scan|first100)\s*\(/);
   assert.doesNotMatch(html, /const\s+COMMON_TERMS\s*=/);
 });
+
+
+test("MCP scan wrapper forwards the selected local analysis window", () => {
+  const text = [...Array(100).fill("word"), "2024"].join(" ");
+  const result = executeEntityScan({ name: "Example", headText: text, lang: "en", window: 500 });
+  assert.equal(result.factDensity.window, 500);
+  assert.ok(result.factDensity.candidateSignals.some((signal) => signal.category === "year"));
+});
