@@ -1,0 +1,49 @@
+import { calculateFactDensity, checkDisambiguation } from "./scanner.js";
+import { generateMachinePack } from "./pack-generator.js";
+import type { EntityAuditResult, EntityInput, SupportedLang } from "./types.js";
+
+export * from "./types.js";
+export * from "./scanner.js";
+export * from "./pack-generator.js";
+
+function resolveLanguage(language: SupportedLang | undefined): SupportedLang {
+  const resolved = language ?? "en";
+  if (!["ar", "ku", "en"].includes(resolved)) {
+    throw new RangeError(`Unsupported language: ${String(resolved)}`);
+  }
+  return resolved;
+}
+
+export function auditEntity(input: EntityInput): EntityAuditResult {
+  if (!input || typeof input !== "object") {
+    throw new TypeError("Entity input must be an object.");
+  }
+  const name = typeof input.name === "string" ? input.name.trim() : "";
+  if (!name) throw new TypeError("Entity name is required.");
+  if (name.length > 200) throw new RangeError("Entity name must not exceed 200 characters.");
+
+  const language = resolveLanguage(input.lang);
+  const normalizedInput: EntityInput = { ...input, name, lang: language };
+  const factDensity = calculateFactDensity(
+    normalizedInput.headText || normalizedInput.description || "",
+    language,
+  );
+  const disambiguation = checkDisambiguation(name, language);
+  const machinePack = generateMachinePack(normalizedInput);
+
+  return {
+    entity: name,
+    timestamp: new Date().toISOString(),
+    language,
+    factDensity,
+    disambiguation,
+    machinePack,
+    scopeNotice: [
+      "Local deterministic analysis only; no network requests are made.",
+      "Pattern-matched signals are not verified facts.",
+      "Name collision analysis uses a limited static lexicon, not a global entity index.",
+      "Generated JSON-LD and llms.txt-style text are drafts from user-supplied data.",
+      "No ranking, GEO visibility, indexing, or AI citation outcome is measured or guaranteed."
+    ]
+  };
+}
