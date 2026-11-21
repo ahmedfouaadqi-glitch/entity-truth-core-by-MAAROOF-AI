@@ -10,7 +10,9 @@ MIT permits users to modify and redistribute their own copies and forks. It cann
 
 ## CODEOWNERS
 
-`.github/CODEOWNERS` assigns all repository paths to `@ahmedfouaadqi-glitch`. This creates a code-owner review request only when the relevant branch ruleset requires code-owner review; CODEOWNERS alone does not block writes or merges.
+`.github/CODEOWNERS` currently assigns all repository paths to `@ahmedfouaadqi-glitch`. This identifies the owner for review requests, but CODEOWNERS alone does not block writes or merges.
+
+**Important reviewer constraint:** pull request authors cannot approve their own pull requests. Because the current sole code owner is the repository owner, requiring Code Owner approval on `main` would block owner-authored PRs unless a second trusted code owner is added. Until that reviewer is appointed and added to CODEOWNERS, enforce one independent approval from a user with write/admin permission, but do not enable the separate required-Code-Owner-approval rule.
 
 ## Ruleset status
 
@@ -21,7 +23,7 @@ The owner has created and enabled this active branch ruleset:
 - Rules: restrict creation, updates and deletion; block non-fast-forward updates (force pushes).
 - Bypass: only the GitHub user `ahmedfouaadqi-glitch`, with `Always` bypass mode.
 
-GitHub's Rulesets API confirmed the rule's active state, all-branches target, enabled rule types and user-specific bypass actor. The connected GitHub integration does not expose ruleset write operations, so additional rulesets must be created in GitHub Settings.
+GitHub's Rulesets API confirmed the active state, all-branches target, enabled rule types and user-specific bypass actor. The connected GitHub integration does not expose ruleset write operations, so additional rulesets must be created in GitHub Settings.
 
 ## Remaining GitHub controls
 
@@ -41,14 +43,16 @@ Create a separate active branch ruleset targeting only `main`:
 
 - Name: `MAAROOF - Protect Main - PR and CI`.
 - Require a pull request before merging.
-- Require at least one approving review.
-- Require review from Code Owners.
+- Require at least one approving review from a user with write/admin permission.
+- Dismiss stale approvals when new commits are pushed.
+- Where available, require the most recent reviewable push to be approved by someone other than the person who pushed it.
 - Require both CI job checks: `Verify on Node 20` and `Verify on Node 22`.
 - Block force pushes.
 - Restrict deletion.
 - Leave the bypass list empty so the PR and CI requirements also apply to the owner.
+- Do not enable required Code Owner approval until a second trusted code owner has been added to `.github/CODEOWNERS`.
 
-**Reviewer constraint:** a pull request author cannot approve their own pull request. Because the current CODEOWNERS entry names the repository owner, an owner-authored PR needs an independent reviewer to satisfy the one-approval and Code Owner review requirements. Do not weaken or bypass these gates merely to merge an owner-authored PR; arrange a trusted independent review.
+The current PR author is the repository owner. That author cannot approve their own PR, so an independent reviewer with write/admin permission is required before it can merge.
 
 ### 3. Official version tags
 
@@ -67,8 +71,9 @@ This allows the owner to publish and manage official version tags while preventi
 - [x] Restrict creations, updates and deletions are enabled for all branches.
 - [x] The owner user is the only bypass actor in that ruleset.
 - [ ] Repository collaborators and teams reviewed; no unauthorized Admin, Maintain or Write access remains.
-- [ ] An active `main` ruleset requires PR, one approval, Code Owner review and both CI checks.
+- [ ] An active `main` ruleset requires PR, one independent approval and both CI checks.
 - [ ] An active `v*` tag ruleset restricts tag creation, update and deletion.
+- [ ] A second trusted code owner is designated before Code Owner approval is made mandatory.
 - [ ] All rulesets verified as Active, not Disabled or Evaluate.
 
 Until the remaining collaborator-permission, `main` and `v*` controls are verified, the repository must not be described as fully protected. The implementation pull request therefore remains Draft and unmerged.
