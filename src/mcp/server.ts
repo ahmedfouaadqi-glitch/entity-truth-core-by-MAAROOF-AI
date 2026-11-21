@@ -3,13 +3,14 @@ import { McpServer } from "@modelcontextprotocol/server";
 import { serveStdio } from "@modelcontextprotocol/server/stdio";
 import { z } from "zod";
 import { executeEntityNameHint, executeEntityProfileGenerate, executeEntityProfileValidate, executeEntityScan } from "./tools.js";
-import type { EntityInput, SupportedLang } from "../types.js";
+import type { AnalysisWindow, EntityInput, SupportedLang } from "../types.js";
 
 const entityInputSchema = z.object({
   name: z.string().trim().min(1).max(200),
   url: z.string().max(2048).optional(),
   description: z.string().max(5000).optional(),
   headText: z.string().max(100000).optional(),
+  window: z.union([z.literal(100), z.literal(500), z.literal("full")]).optional(),
   aliases: z.array(z.string().max(200)).max(100).optional(),
   knowsLanguages: z.array(z.string().max(80)).max(50).optional(),
   markets: z.array(z.string().max(120)).max(100).optional(),
@@ -26,6 +27,7 @@ function toEntityInput(input: EntityInputSchema): EntityInput {
     ...(input.url !== undefined ? { url: input.url } : {}),
     ...(input.description !== undefined ? { description: input.description } : {}),
     ...(input.headText !== undefined ? { headText: input.headText } : {}),
+    ...(input.window !== undefined ? { window: input.window as AnalysisWindow } : {}),
     ...(input.aliases !== undefined ? { aliases: input.aliases } : {}),
     ...(input.knowsLanguages !== undefined ? { knowsLanguages: input.knowsLanguages } : {}),
     ...(input.markets !== undefined ? { markets: input.markets } : {}),
@@ -68,7 +70,7 @@ export function createEntityTruthMcpServer() {
   server.registerTool(
     "entity_scan",
     {
-      description: "Run the complete local Entity Truth Core audit: first-100-word candidate scan, limited name hint, and draft machine-readable profile. No network calls or independent fact verification.",
+      description: "Run the complete local Entity Truth Core audit with a selectable 100-word, 500-word, or full-text candidate scan, a limited name hint, and draft machine-readable profile. No network calls or independent fact verification.",
       inputSchema: entityInputSchema,
     },
     async (input) => safelyRun(() => executeEntityScan(toEntityInput(input))),
