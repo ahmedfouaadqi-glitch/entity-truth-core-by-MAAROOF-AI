@@ -20,3 +20,58 @@ test("labels user facts as unverified",()=>{const r=generateMachinePack({name:"E
 test("preserves explicit markets and language without assumptions",()=>{const r=generateMachinePack({name:"Example",markets:["Iraq"],knowsLanguages:["ar","en"]});assert.deepEqual(r.jsonLd.knowsLanguage,["ar","en"]);assert.equal(Array.isArray(r.jsonLd.areaServed),true);});
 test("CLI exports three files and refuses overwrite by default",()=>{const d=mkdtempSync(join(tmpdir(),"entity-truth-"));try{const args=[resolve("dist/cli.js"),"Example Entity","--out-dir",d];execFileSync(process.execPath,args);assert.ok(existsSync(join(d,"audit-report.json")));assert.ok(existsSync(join(d,"organization.jsonld")));assert.ok(existsSync(join(d,"llms.txt")));assert.throws(()=>execFileSync(process.execPath,args),/Refusing to overwrite/);execFileSync(process.execPath,[...args,"--force"]);}finally{rmSync(d,{recursive:true,force:true});}});
 test("CLI reads JSON input preserving Arabic language",()=>{const d=mkdtempSync(join(tmpdir(),"entity-truth-json-"));try{const f=join(d,"entity.json");writeFileSync(f,JSON.stringify({name:"شركة المثال",headText:"تأسست عام 2020",lang:"ar"}));const out=execFileSync(process.execPath,[resolve("dist/cli.js"),"--input",f,"--json"],{encoding:"utf8"});assert.equal(JSON.parse(out).language,"ar");}finally{rmSync(d,{recursive:true,force:true});}});
+
+
+test("default analysis window remains exactly 100 lexical words",()=>{
+  const text=[...Array(100).fill("word"),"2024"].join(" ");
+  const report=calculateFactDensity(text,"en");
+  assert.equal(report.window,100);
+  assert.equal(report.maxWords,100);
+  assert.equal(report.totalWordsAnalyzed,100);
+  assert.equal(report.candidateSignalCount,0);
+});
+
+test("500-word window includes candidate patterns after the default boundary",()=>{
+  const text=[...Array(100).fill("word"),"2024"].join(" ");
+  const report=calculateFactDensity(text,"en",500);
+  assert.equal(report.window,500);
+  assert.equal(report.maxWords,500);
+  assert.equal(report.totalWordsAnalyzed,101);
+  assert.ok(report.candidateSignals.some(signal=>signal.category==="year"));
+});
+
+test("full window scans all supplied text and reports the effective word count",()=>{
+  const text=[...Array(500).fill("word"),"2024","more","text"].join(" ");
+  const report=calculateFactDensity(text,"en","full");
+  assert.equal(report.window,"full");
+  assert.equal(report.maxWords,503);
+  assert.equal(report.totalWordsAnalyzed,503);
+  assert.ok(report.candidateSignals.some(signal=>signal.category==="year"));
+  assert.match(report.limitations.join(" "),/All lexical words/);
+});
+
+test("analysis window rejects unsupported values",()=>{
+  assert.throws(()=>calculateFactDensity("Example text","en",250),/Analysis window must be 100, 500, or full/);
+});
+
+test("auditEntity forwards an explicit analysis window",()=>{
+  const text=[...Array(100).fill("word"),"2024"].join(" ");
+  const report=auditEntity({name:"Example",headText:text,window:500});
+  assert.equal(report.factDensity.window,500);
+  assert.ok(report.factDensity.candidateSignals.some(signal=>signal.category==="year"));
+});
+
+test("CLI accepts --window 500 and reports the selected window",()=>{
+  const text=[...Array(100).fill("word"),"2024"].join(" ");
+  const out=execFileSync(process.execPath,[resolve("dist/cli.js"),"Example","--text",text,"--window","500","--json"],{encoding:"utf8"});
+  const report=JSON.parse(out);
+  assert.equal(report.factDensity.window,500);
+  assert.ok(report.factDensity.candidateSignals.some(signal=>signal.category==="year"));
+});
+
+test("CLI accepts --window full and rejects unsupported windows",()=>{
+  const text=[...Array(500).fill("word"),"2024"].join(" ");
+  const out=execFileSync(process.execPath,[resolve("dist/cli.js"),"Example","--text",text,"--window","full","--json"],{encoding:"utf8"});
+  assert.equal(JSON.parse(out).factDensity.window,"full");
+  assert.throws(()=>execFileSync(process.execPath,[resolve("dist/cli.js"),"Example","--window","250","--json"]));
+});
