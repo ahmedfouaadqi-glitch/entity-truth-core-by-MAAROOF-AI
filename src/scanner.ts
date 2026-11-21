@@ -1,4 +1,4 @@
-import type { DisambiguationCheck, FactDensityReport, FactSignal, HeuristicRisk, SupportedLang } from "./types.js";
+import type { AnalysisWindow, DisambiguationCheck, FactDensityReport, FactSignal, HeuristicRisk, SupportedLang } from "./types.js";
 
 const COMMON_TERMS: Record<SupportedLang, Set<string>> = {
   ar: new Set(["معروف","مشهور","أصيل","مميز","حديث","سريع","دولي","وطني","أول","شامل","رائد","ذكي","متقدم"]),
@@ -6,19 +6,36 @@ const COMMON_TERMS: Record<SupportedLang, Set<string>> = {
   en: new Set(["best","leading","fast","innovative","top","global","prime","smart","known","famous","first","modern","advanced"])
 };
 const normalize = (s:string) => s.normalize("NFC").toLocaleLowerCase().replace(/[\u064B-\u065F\u0670\u0640]/g,"").replace(/[^\p{L}\p{N}]+/gu," ").trim().replace(/\s+/g," ");
-function first100(text:string) {
-  const matches=[...text.matchAll(/[\p{L}\p{N}][\p{L}\p{N}\p{M}'’\-]*/gu)];
-  const selected=matches.slice(0,100);
-  const last=selected.at(-1);
-  return {snippet:last ? text.slice(0,(last.index??0)+last[0].length) : "",count:selected.length};
+
+function selectAnalysisWindow(text:string, window:AnalysisWindow) {
+  const limit = window === "full" ? Number.POSITIVE_INFINITY : window;
+  const tokenPattern = /[\p{L}\p{N}][\p{L}\p{N}\p{M}'’\-]*/gu;
+  let count = 0;
+  let end = 0;
+
+  for (const match of text.matchAll(tokenPattern)) {
+    count += 1;
+    end = (match.index ?? 0) + match[0].length;
+    if (count >= limit) break;
+  }
+
+  return {
+    snippet: window === "full" ? text : text.slice(0, end),
+    count,
+    maxWords: window === "full" ? count : window,
+  };
 }
+
 function unique(items:FactSignal[]) {
   const seen=new Set<string>();
   return items.filter(x=>{const k=x.category+":"+x.value.toLowerCase();if(seen.has(k))return false;seen.add(k);return true;});
 }
-export function calculateFactDensity(text:string,lang:SupportedLang="en"):FactDensityReport {
+
+export function calculateFactDensity(text:string,lang:SupportedLang="en",window:AnalysisWindow=100):FactDensityReport {
   if(!["ar","ku","en"].includes(lang)) throw new RangeError("Language must be ar, ku, or en.");
-  const {snippet,count}=first100(typeof text==="string"?text:"");
+  if(window!==100 && window!==500 && window!=="full") throw new RangeError("Analysis window must be 100, 500, or full.");
+  const selected=selectAnalysisWindow(typeof text==="string"?text:"",window);
+  const {snippet,count,maxWords}=selected;
   const patterns:Array<[FactSignal["category"],RegExp]>=[
     ["year",/(?:19|20|١٩|٢٠|۱۹|۲۰)[0-9٠-٩۰-۹]{2}/gu],
     ["percentage",/(?:^|[^\p{L}\p{N}])[0-9٠-٩۰-۹]{1,3}(?:[.,٫][0-9٠-٩۰-۹]+)?\s?%(?=$|[^\p{L}\p{N}])/gu],
@@ -32,14 +49,16 @@ export function calculateFactDensity(text:string,lang:SupportedLang="en"):FactDe
     if(value) signals.push({category,value});
   }
   const candidates=unique(signals), signalDensity=count?candidates.length/count:0;
+  const windowDescription=window==="full"?"All lexical words in the supplied text were examined.":`Only the first ${window} lexical words are examined.`;
   return {
-    method:"heuristic-pattern-scan",maxWords:100,totalWordsAnalyzed:count,candidateSignalCount:candidates.length,candidateSignals:candidates,
+    method:"heuristic-pattern-scan",window,maxWords,totalWordsAnalyzed:count,candidateSignalCount:candidates.length,candidateSignals:candidates,
     signalDensity:Math.round(signalDensity*1000)/1000,
     heuristicScore:Math.min(100,Math.round(candidates.length/4*100)),
     interpretation:candidates.length>=4?"Several number/date/standard patterns were detected. Verify each item and its source.":candidates.length>=2?"Some candidate patterns were detected. Review them and add sourced details where useful.":"Few candidate patterns were detected. This does not mean the entity lacks facts.",
-    limitations:["Detected patterns are candidates, not verified facts.","A number, date, percentage, currency, or standard can be false, outdated, or unrelated.","The scanner uses lightweight patterns and does not understand every language inflection.","The heuristic score is not a search-ranking factor or an AI-visibility measurement.","Only the first 100 lexical words are examined."]
+    limitations:["Detected patterns are candidates, not verified facts.","A number, date, percentage, currency, or standard can be false, outdated, or unrelated.","The scanner uses lightweight patterns and does not understand every language inflection.","The heuristic score is not a search-ranking factor or an AI-visibility measurement.",windowDescription]
   };
 }
+
 export function checkDisambiguation(name:string,lang:SupportedLang="en"):DisambiguationCheck {
   if(!["ar","ku","en"].includes(lang)) throw new RangeError("Language must be ar, ku, or en.");
   const normalizedName=normalize(name||""), terms=COMMON_TERMS[lang];
