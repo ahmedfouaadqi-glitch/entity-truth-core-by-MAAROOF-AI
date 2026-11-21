@@ -74,33 +74,131 @@
 </section>
 <footer class="foot">ENTITY TRUTH CORE · OPEN SOURCE TOOL BY MAAROOF AI · LOCAL-FIRST</footer>
 </main>
-<script>
+<script type="module">
+import { auditEntity } from "../dist/index.js";
 const copy={
 ar:{eyebrow:"أداة مجانية مستقلة ومفتوحة المصدر",title:"اجعل هوية كيانك أوضح للقراءة الآلية.",intro:"فحص أولي لمعلومات شركتك، ثم تجهيز مسودة بيانات منظمة وملف تعريفي. يعمل كل شيء داخل متصفحك دون إرسال بياناتك إلى خادم.",formTitle:"معلومات الكيان",nameLabel:"اسم الشركة أو العلامة التجارية *",namePh:"مثال: شركة المثال",urlLabel:"الموقع الرسمي (اختياري)",descriptionLabel:"وصف مختصر (اختياري)",descPh:"ماذا تقدم الشركة؟ لمن؟ وفي أي قطاع؟",textLabel:"النص التعريفي الذي تريد فحصه",textPh:"الصق مقدمة موقعك أو تعريف الشركة هنا...",textHelp:"يفحص أول 100 كلمة فقط بحثاً عن إشارات رقمية وتواريخ ومعايير. لا يتحقق من صحتها.",marketsLabel:"الأسواق التي تخدمها (اختياري)",marketsPh:"العراق، الإمارات، ألمانيا",marketsHelp:"افصل بين الأسواق بفاصلة. لن نفترض أن نشاطك عالمي.",languagesLabel:"لغات الكيان (لا لغات الأداة)",aliasesLabel:"أسماء بديلة (اختياري)",aliasesPh:"اسم مختصر، اسم تجاري آخر",run:"افحص الكيان",localOnly:"محلي بالكامل · دون زحف أو API",resultTitle:"نتيجة الفحص الأولي",empty:"أدخل بيانات الكيان واضغط «افحص الكيان». لن يتم إرسال أي شيء إلى الإنترنت.",words:"كلمة مفحوصة / 100",signals:"إشارات مرشحة",nameHintLabel:"ملاحظة الاسم",signalsTitle:"الإشارات التي عثر عليها الفحص",packTitle:"مسودة حزمة الكيان",disclaimer:"هذه أداة فحص أولي. لا تتحقق من الحقائق أو ملكية الروابط، ولا تقيس ظهورك في محركات البحث أو إجابات الذكاء الاصطناعي.",dlJsonld:"تنزيل JSON-LD",dlLlms:"تنزيل llms.txt",dlReport:"تنزيل تقرير JSON",nextTitle:"تحتاج إلى تحليل أعمق؟",nextText:"هذه الأداة تجهّز وصف الكيان فقط. MAAROOF AI يقدم البحث والتحقق من المصادر وقياس الظهور وتحليل المنافسين وبناء الاستراتيجيات والتنفيذ.",nextLink:"اكتشف MAAROOF AI ←",hintLow:"لا توجد إشارة واضحة",hintMid:"راجع وضوح الاسم",hintHigh:"اسم عام أو وصفي",urlInvalid:"لم يُدرج الموقع: الرابط غير صالح أو ليس HTTP(S).",urlCreds:"لم يُدرج الموقع: لا تقبل الروابط التي تتضمن بيانات دخول.",marketEmpty:"لم تُحدد أسواق؛ لن تُضاف تغطية عالمية.",noSignals:"لم تُكتشف أنماط رقمية في أول 100 كلمة. هذا لا يعني غياب الحقائق.",factsLabel:"إشارات مرشحة فقط — ليست حقائق متحققة",downloadName:"entity-truth",packOk:"تم تجهيز JSON-LD وملف llms.txt كمسودتين بناءً على مدخلاتك."},
 en:{eyebrow:"Independent, free and open-source helper",title:"Make your entity easier to describe to machines.",intro:"Run a small profile check and generate draft structured data and an entity brief. Everything runs in your browser; your data is not sent to a server.",formTitle:"Entity information",nameLabel:"Company or brand name *",namePh:"Example Company",urlLabel:"Official website (optional)",descriptionLabel:"Short description (optional)",descPh:"What does the organization offer, to whom, and in which sector?",textLabel:"Opening text to inspect",textPh:"Paste the opening section of your website or company profile...",textHelp:"Only the first 100 words are checked for numeric, date and standard patterns. Their truth is not verified.",marketsLabel:"Markets served (optional)",marketsPh:"Iraq, UAE, Germany",marketsHelp:"Separate markets with commas. Worldwide coverage is never assumed.",languagesLabel:"Entity languages (not tool languages)",aliasesLabel:"Alternate names (optional)",aliasesPh:"Short name, trading name",run:"Check entity",localOnly:"Local-only · no crawling or API",resultTitle:"Initial check",empty:"Enter entity details and select “Check entity”. Nothing is sent to the internet.",words:"Words scanned / 100",signals:"Candidate signals",nameHintLabel:"Name hint",signalsTitle:"Detected candidate signals",packTitle:"Draft entity pack",disclaimer:"This is a preliminary helper. It does not verify facts or link ownership, and does not measure search or AI-answer visibility.",dlJsonld:"Download JSON-LD",dlLlms:"Download llms.txt",dlReport:"Download JSON report",nextTitle:"Need deeper analysis?",nextText:"This helper prepares a basic entity profile only. MAAROOF AI provides research, source verification, visibility measurement, competitor analysis, strategy and implementation.",nextLink:"Explore MAAROOF AI →",hintLow:"No clear hint",hintMid:"Review name clarity",hintHigh:"Generic or descriptive name",urlInvalid:"Website omitted: invalid URL or non-HTTP(S) scheme.",urlCreds:"Website omitted: URLs containing login credentials are not accepted.",marketEmpty:"No markets supplied; worldwide coverage is not added.",noSignals:"No numeric patterns were detected in the first 100 words. This does not mean facts are absent.",factsLabel:"Candidate signals only — not verified facts",downloadName:"entity-truth",packOk:"JSON-LD and llms.txt drafts are ready from your supplied information."},
 ku:{eyebrow:"ئامرازی سەربەخۆ و کراوەی خۆڕایی",title:"ناسنامەی کەسایەتی یان کۆمپانیاکەت ڕوونتر بکە.",intro:"پشکنینێکی سەرەتایی بۆ زانیارییەکان و دروستکردنی پڕۆفایلی پێکهاتەدار. هەموو شتێک لە وێبگەڕەکەتدا ئەنجام دەدرێت و هیچ داتایەک نانێردرێت.",formTitle:"زانیارییەکانی کەسایەتی",nameLabel:"ناوی کۆمپانیا یان براند *",namePh:"کۆمپانیای نموونە",urlLabel:"ماڵپەڕی فەرمی (ئارەزوومەندانە)",descriptionLabel:"پێناسەی کورت (ئارەزوومەندانە)",descPh:"کۆمپانیاکە چی پێشکەش دەکات و لە چ بوارێکدا؟",textLabel:"دەقی پێناسەیی بۆ پشکنین",textPh:"دەقی سەرەتایی ماڵپەڕەکەت لێرە دابنێ...",textHelp:"تەنها 100 وشەی یەکەم بۆ ژمارە و بەروار و ستاندارد دەپشکنێت؛ دروستیان پشتڕاست ناکاتەوە.",marketsLabel:"بازاڕەکانی خزمەتکراو (ئارەزوومەندانە)",marketsPh:"عێراق، ئیمارات، ئەڵمانیا",marketsHelp:"بازاڕەکان بە کۆما جیا بکەرەوە. جیهانیبوون بەخۆکارانە دانانرێت.",languagesLabel:"زمانەکانی کەسایەتی (نەک زمانی ئامراز)",aliasesLabel:"ناوی جێگرەوە (ئارەزوومەندانە)",aliasesPh:"ناوی کورت یان ناوی بازرگانی",run:"پشکنینی کەسایەتی",localOnly:"لە ناوخۆدا · بێ خەزاندن و API",resultTitle:"ئەنجامی پشکنینی سەرەتایی",empty:"زانیارییەکان بنووسە و دوگمەی پشکنین هەڵبژێرە. هیچ شتێک نانێردرێت.",words:"وشەی پشکنراو / 100",signals:"نیشانەی ئەگەری",nameHintLabel:"تێبینی ناو",signalsTitle:"نیشانە دۆزراوەکان",packTitle:"پاکێتی پڕۆفایلی پێشنیارکراو",disclaimer:"ئەمە ئامرازێکی سەرەتاییە؛ ڕاستی زانیاری و خاوەندارێتی لینکەکان پشتڕاست ناکاتەوە و دەرکەوتنی AI ناپێوێت.",dlJsonld:"داگرتنی JSON-LD",dlLlms:"داگرتنی llms.txt",dlReport:"داگرتنی ڕاپۆرتی JSON",nextTitle:"پێویستت بە شیکردنەوەی قووڵترە؟",nextText:"ئەم ئامرازە تەنها پڕۆفایلێکی سەرەتایی ئامادە دەکات. MAAROOF AI گەڕان، پشتڕاستکردنەوەی سەرچاوە، پێوانەکردنی دەرکەوتن، شیکردنەوەی ڕکابەر و ستراتیژی پێشکەش دەکات.",nextLink:"MAAROOF AI ببینە ←",hintLow:"ئاماژەیەکی ڕوون نییە",hintMid:"ڕوونی ناوەکە بپشکنە",hintHigh:"ناوەکە گشتی یان وەسفییە",urlInvalid:"ماڵپەڕ دانەنرا: بەستەرەکە نادروستە.",urlCreds:"ماڵپەڕ دانەنرا: بەستەری خاوەن زانیاری چوونەژوورەوە قبوڵ ناکرێت.",marketEmpty:"بازاڕ دیاری نەکراوە؛ داپۆشینی جیهانی زیاد ناکرێت.",noSignals:"لە 100 وشەی یەکەمدا نیشانەی ژمارەیی نەدۆزرایەوە. ئەمە بە مانای نەبوونی زانیاری نییە.",factsLabel:"تەنها نیشانەی ئەگەری — نەک ڕاستی پشتڕاستکراوە",downloadName:"entity-truth",packOk:"مسودەی JSON-LD و llms.txt ئامادە کرا."}
 };
-let ui="ar",last=null;
-const $=id=>document.getElementById(id);
-function setLang(lang){ui=lang;document.documentElement.lang=lang;document.documentElement.dir=lang==="en"?"ltr":"rtl";document.querySelectorAll("[data-i]").forEach(el=>{const k=el.dataset.i;if(copy[lang][k])el.textContent=copy[lang][k];});document.querySelectorAll("[data-ph]").forEach(el=>{const k=el.dataset.ph;if(copy[lang][k])el.placeholder=copy[lang][k];});document.querySelectorAll(".lang").forEach(b=>b.classList.toggle("active",b.dataset.lang===lang));}
-document.querySelectorAll(".lang").forEach(b=>b.addEventListener("click",()=>setLang(b.dataset.lang)));
-function first100(text){const m=[...text.matchAll(/[\p{L}\p{N}][\p{L}\p{N}\p{M}'’\-]*/gu)].slice(0,100);const l=m.at(-1);return {snippet:l?text.slice(0,l.index+l[0].length):"",count:m.length};}
-function scan(text){const first=first100(text),rules=[["year",/(?:19|20|١٩|٢٠|۱۹|۲۰)[0-9٠-٩۰-۹]{2}/gu],["percentage",/[0-9٠-٩۰-۹]{1,3}(?:[.,٫][0-9٠-٩۰-۹]+)?\s?%/gu],["standard",/\b(?:ISO[\s-]?\d{3,5}(?:-\d+)?|GDPR|SOC\s?2|PCI[\s-]?DSS)\b/giu],["scale",/[0-9٠-٩۰-۹][0-9٠-٩۰-۹,.٫]*\+?\s*(?:users?|customers?|clients?|branches|countries|employees|offices|products|عميل|عملاء|فرع|فروع|دولة|دول|مستخدم|مستخدمين|وڵات|کڕیار)/giu],["currency",/(?:[$€£]\s?[0-9٠-٩۰-۹][0-9٠-٩۰-۹,.٫]*|\b(?:IQD|USD|EUR|GBP)\s?[0-9٠-٩۰-۹][0-9٠-٩۰-۹,.٫]*\b)/giu]];let signals=[];for(const [type,re] of rules)for(const m of first.snippet.matchAll(re)){const v=m[0].trim();if(!signals.some(x=>x.type===type&&x.value.toLowerCase()===v.toLowerCase()))signals.push({type,value:v});}return {...first,signals};}
-function csvList(s){return s.split(/[,،؛;\n]+/).map(x=>x.trim()).filter(Boolean);}
-function validUrl(raw){if(!raw)return {value:""};try{const u=new URL(raw);if(!["http:","https:"].includes(u.protocol))return {error:"invalid"};if(u.username||u.password)return {error:"credentials"};u.hash="";return {value:u.toString()};}catch{return {error:"invalid"};}}
-function download(name,text,type){const blob=new Blob([text],{type:type+";charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);}
-$("entityForm").addEventListener("submit",e=>{e.preventDefault();const T=copy[ui],name=$("name").value.trim(),site=validUrl($("url").value.trim()),description=$("description").value.trim(),text=$("headText").value.trim(),markets=csvList($("markets").value),aliases=csvList($("aliases").value),langs=[...document.querySelectorAll(".entityLanguage:checked")].map(x=>x.value),scanned=scan(text||description);let warnings=[];if(site.error)warnings.push(site.error==="credentials"?T.urlCreds:T.urlInvalid);if(!markets.length)warnings.push(T.marketEmpty);
-const common={ar:["معروف","مشهور","أصيل","مميز","حديث","سريع","دولي","وطني","أول","شامل","رائد","ذكي"],ku:["دیار","نوێ","خێرا","نێودەوڵەتی","یەکەم","پێشەنگ","باشترین"],en:["best","leading","fast","innovative","top","global","prime","smart","known","famous","first"]}[ui],n=name.normalize("NFC").toLocaleLowerCase().replace(/[\u064B-\u065F\u0670\u0640]/g,""),parts=n.split(/[^\p{L}\p{N}]+/u).filter(Boolean),hits=parts.filter(x=>common.includes(x)),short=Array.from(n.replace(/[^\p{L}\p{N}]/gu,"")).length<=4,hint=hits.length||short?(hits.length?T.hintHigh:T.hintMid):T.hintLow;
-const jsonLd={"@context":"https://schema.org","@type":"Organization","name":name};if(site.value){jsonLd.url=site.value;const base=new URL(site.value);base.search="";base.pathname=base.pathname.replace(/\/+$/,"")+"/";jsonLd["@id"]=base.toString()+"#organization";}if(description)jsonLd.description=description;if(aliases.length)jsonLd.alternateName=aliases;if(markets.length)jsonLd.areaServed=markets.map(x=>({"@type":"AdministrativeArea","name":x}));if(langs.length)jsonLd.knowsLanguage=langs;
-const llms=["# "+name,"",description||"> User-supplied entity profile.","","## Scope and provenance","- Generated from user-supplied information.","- Candidate signals are not independently verified facts.","- No market coverage is inferred when none is supplied.",""];if(markets.length)llms.push("## User-supplied markets",...markets.map(x=>"- "+x),"");if(aliases.length)llms.push("## Alternate names",...aliases.map(x=>"- "+x),"");llms.push("## Limitations","- This file is a draft generated locally.","- Website links and statements were not independently checked.","- No AI visibility or search ranking was measured.");
-last={entity:name,timestamp:new Date().toISOString(),language:ui,wordsAnalyzed:scanned.count,candidateSignals:scanned.signals,nameHint:hint,markets,aliases,entityLanguages:langs,warnings,jsonLd,llmsTxt:llms.join("\n")+"\n"};
-$("empty").style.display="none";$("results").classList.add("show");$("wordCount").textContent=String(scanned.count);$("signalCount").textContent=String(scanned.signals.length);$("nameHint").textContent=hint;
-const signalList=$("signalsList");signalList.replaceChildren();if(!scanned.signals.length){const li=document.createElement("li");li.textContent=T.noSignals;signalList.append(li);}else for(const s of scanned.signals){const li=document.createElement("li"),b=document.createElement("span");b.className="pill";b.textContent=s.type;li.append(b,document.createTextNode(s.value));signalList.append(li);}
-const pack=$("packList");pack.replaceChildren();const messages=[T.packOk,T.factsLabel,...warnings];for(const msg of messages){const li=document.createElement("li");li.textContent=msg;pack.append(li);}
+
+let ui = "ar";
+let last = null;
+const $ = (id) => document.getElementById(id);
+
+function setLang(lang) {
+  ui = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
+  document.querySelectorAll("[data-i]").forEach((el) => {
+    const key = el.dataset.i;
+    if (copy[lang][key]) el.textContent = copy[lang][key];
+  });
+  document.querySelectorAll("[data-ph]").forEach((el) => {
+    const key = el.dataset.ph;
+    if (copy[lang][key]) el.placeholder = copy[lang][key];
+  });
+  document.querySelectorAll(".lang").forEach((button) => {
+    button.classList.toggle("active", button.dataset.lang === lang);
+  });
+}
+
+function csvList(value) {
+  return value.split(/[,،؛;\n]+/).map((item) => item.trim()).filter(Boolean);
+}
+
+function download(name, content, type) {
+  const blob = new Blob([content], { type: type + ";charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = name;
+  anchor.click();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+document.querySelectorAll(".lang").forEach((button) => {
+  button.addEventListener("click", () => setLang(button.dataset.lang));
 });
-$("dlJsonld").addEventListener("click",()=>last&&download("organization.jsonld",JSON.stringify(last.jsonLd,null,2),"application/ld+json"));
-$("dlLlms").addEventListener("click",()=>last&&download("llms.txt",last.llmsTxt,"text/plain"));
-$("dlReport").addEventListener("click",()=>last&&download("entity-audit.json",JSON.stringify(last,null,2),"application/json"));
+
+$("entityForm").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const translations = copy[ui];
+  const name = $("name").value.trim();
+  if (!name) return;
+
+  const entityLanguages = [...document.querySelectorAll(".entityLanguage:checked")].map((item) => item.value);
+  const result = auditEntity({
+    name,
+    url: $("url").value.trim() || undefined,
+    description: $("description").value.trim() || undefined,
+    headText: $("headText").value.trim() || undefined,
+    markets: csvList($("markets").value),
+    aliases: csvList($("aliases").value),
+    knowsLanguages: entityLanguages,
+    lang: ui
+  });
+
+  last = result;
+  const risk = result.disambiguation.heuristicRisk;
+  const nameHint = risk === "high"
+    ? translations.hintHigh
+    : risk === "medium"
+      ? translations.hintMid
+      : risk === "unknown"
+        ? translations.hintMid
+        : translations.hintLow;
+
+  const localizedWarnings = result.machinePack.warnings.map((warning) => {
+    if (warning.includes("without credentials")) return translations.urlCreds;
+    if (warning.includes("invalid absolute URL")) return translations.urlInvalid;
+    if (warning.includes("Worldwide coverage is not assumed")) return translations.marketEmpty;
+    return warning;
+  });
+
+  $("empty").style.display = "none";
+  $("results").classList.add("show");
+  $("wordCount").textContent = String(result.factDensity.totalWordsAnalyzed);
+  $("signalCount").textContent = String(result.factDensity.candidateSignalCount);
+  $("nameHint").textContent = nameHint;
+
+  const signalList = $("signalsList");
+  signalList.replaceChildren();
+  if (!result.factDensity.candidateSignals.length) {
+    const item = document.createElement("li");
+    item.textContent = translations.noSignals;
+    signalList.append(item);
+  } else {
+    for (const signal of result.factDensity.candidateSignals) {
+      const item = document.createElement("li");
+      const label = document.createElement("span");
+      label.className = "pill";
+      label.textContent = signal.category;
+      item.append(label, document.createTextNode(signal.value));
+      signalList.append(item);
+    }
+  }
+
+  const packList = $("packList");
+  packList.replaceChildren();
+  for (const message of [translations.packOk, translations.factsLabel, ...localizedWarnings]) {
+    const item = document.createElement("li");
+    item.textContent = message;
+    packList.append(item);
+  }
+});
+
+$("dlJsonld").addEventListener("click", () => {
+  if (last) download("organization.jsonld", JSON.stringify(last.machinePack.jsonLd, null, 2), "application/ld+json");
+});
+$("dlLlms").addEventListener("click", () => {
+  if (last) download("llms.txt", last.machinePack.llmsTxt, "text/plain");
+});
+$("dlReport").addEventListener("click", () => {
+  if (last) download("entity-audit.json", JSON.stringify(last, null, 2), "application/json");
+});
+
+setLang("ar");
 </script>
 </body>
 </html>
