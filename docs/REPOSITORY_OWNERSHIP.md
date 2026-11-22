@@ -69,7 +69,7 @@ This allows the owner to publish and manage official version tags while preventi
 
 `.github/dependabot.yml` configures weekly version-update checks for npm and GitHub Actions. Dependabot reads this configuration from the default branch, so the schedule is not active for the official repository until the PR containing this file is merged into `main`.
 
-The YAML file controls version-update behavior. Dependabot alerts, security updates and private vulnerability reporting are separate repository security settings. The owner must review **Settings → Security → Code security and analysis** and enable the appropriate available settings, then confirm that alerts and the private **Report a vulnerability** path are visible. The GitHub connector has not verified those settings in this change; do not mark them enabled until checked in repository Settings.
+The YAML file controls version-update behavior. Dependabot alerts, security updates and private vulnerability reporting are separate repository security settings. The owner must review **Repository Settings → Security and quality → Advanced Security**. Enable the dependency graph first, then Dependabot alerts and Dependabot security updates where available. Enable **Private vulnerability reporting** separately and verify that **Report a vulnerability** appears under Advisories. The GitHub connector has not verified those settings in this change; do not mark them enabled until checked in repository Settings. GitHub documents that dependency graph is a prerequisite for Dependabot alerts on public repositories.
 
 ## Verification checklist
 
