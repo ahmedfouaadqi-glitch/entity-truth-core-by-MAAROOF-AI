@@ -118,6 +118,32 @@ function list(value:string,fieldName:string,rowNumber:number):string[] {
   if(!value)return [];
   return value.split("|").map(item=>item.trim()).filter(Boolean);
 }
+function isRecord(value:unknown):value is Record<string,unknown> {
+  return typeof value==="object" && value!==null && !Array.isArray(value);
+}
+function parseOpeningHours(value:string,rowNumber:number):OpeningHoursSpecificationInput[] {
+  const items=jsonArray<unknown>(value,"openingHours",rowNumber);
+  for(const item of items){
+    if(!isRecord(item)||!Array.isArray(item.dayOfWeek)||item.dayOfWeek.length===0||
+      item.dayOfWeek.some(day=>typeof day!=="string")||
+      typeof item.opens!=="string"||typeof item.closes!=="string"||
+      (item.validFrom!==undefined&&typeof item.validFrom!=="string")||
+      (item.validThrough!==undefined&&typeof item.validThrough!=="string")){
+      throw new Error("Row "+rowNumber+": each openingHours item needs a dayOfWeek string array, opens and closes strings.");
+    }
+  }
+  return items as OpeningHoursSpecificationInput[];
+}
+function parseFaqs(value:string,rowNumber:number):FAQItemInput[] {
+  const items=jsonArray<unknown>(value,"faqs",rowNumber);
+  for(const item of items){
+    if(!isRecord(item)||typeof item.question!=="string"||!item.question.trim()||
+      typeof item.answer!=="string"||!item.answer.trim()){
+      throw new Error("Row "+rowNumber+": each FAQ item needs a non-empty question and answer.");
+    }
+  }
+  return items as FAQItemInput[];
+}
 function jsonArray<T>(value:string,label:string,rowNumber:number):T[] {
   if(!value)return [];
   let parsed:unknown;
@@ -176,8 +202,8 @@ function mapRow(record:CsvRecord,columns:Map<string,number>):EntityInput {
   const officialProfiles=list(cell(record,columns,"officialprofiles"),"officialProfiles",row);
   const facts=list(cell(record,columns,"facts"),"facts",row);
   const services=list(cell(record,columns,"services"),"services",row).map(service=>({name:service}));
-  const openingHours=jsonArray<OpeningHoursSpecificationInput>(cell(record,columns,"openinghours"),"openingHours",row);
-  const faqs=jsonArray<FAQItemInput>(cell(record,columns,"faqs"),"faqs",row);
+  const openingHours=parseOpeningHours(cell(record,columns,"openinghours"),row);
+  const faqs=parseFaqs(cell(record,columns,"faqs"),row);
   const serviceType=cell(record,columns,"servicetype");
   const url=cell(record,columns,"url");
   const description=cell(record,columns,"description");
