@@ -65,6 +65,12 @@ Import `docs/github-rulesets/official-version-tags.json` from **Settings → Rul
 
 This allows the owner to publish and manage official version tags while preventing other users with repository write access from creating, moving or deleting official `v*` tags.
 
+## Dependency and vulnerability settings
+
+`.github/dependabot.yml` configures weekly version-update checks for npm and GitHub Actions. Dependabot reads this configuration from the default branch, so the schedule is not active for the official repository until the PR containing this file is merged into `main`.
+
+The YAML file controls version-update behavior. Dependabot alerts, security updates and private vulnerability reporting are separate repository security settings. The owner must review **Settings → Security → Code security and analysis** and enable the appropriate available settings, then confirm that alerts and the private **Report a vulnerability** path are visible. The GitHub connector has not verified those settings in this change; do not mark them enabled until checked in repository Settings.
+
 ## Verification checklist
 
 - [x] An active branch ruleset targets all branches.
@@ -75,6 +81,9 @@ This allows the owner to publish and manage official version tags while preventi
 - [ ] An active `v*` tag ruleset restricts tag creation, update and deletion.
 - [ ] A second trusted code owner is designated before Code Owner approval is made mandatory.
 - [ ] All rulesets verified as Active, not Disabled or Evaluate.
+- [ ] Dependabot weekly version updates observed after `.github/dependabot.yml` is merged to `main`.
+- [ ] Dependabot alerts and security updates checked and enabled where available.
+- [ ] Private vulnerability reporting enabled and verified in the repository Security tab.
 
 Detailed local import instructions are in `docs/github-rulesets/README.md`. After importing, verify that both new rulesets appear in GitHub as Active and their targets and bypass lists match the JSON files. ## Implementation status
 
