@@ -60,24 +60,28 @@ function cleanOpeningHours(input:EntityInput["openingHours"]):Record<string,unkn
   }).filter(item=>Array.isArray(item.dayOfWeek)||item.opens||item.closes);
 }
 function cleanServices(input:EntityInput["services"]):Record<string,unknown>[] {
-  if(!Array.isArray(input)) return [];
-  return input.map((item)=>{
+  const result:Record<string,unknown>[]=[];
+  if(!Array.isArray(input))return result;
+  for(const item of input){
     const name=text(item?.name);
-    if(!name)return undefined;
+    if(!name)continue;
     const service:Record<string,unknown>={"@type":"Service",name};
     const description=text(item.description),serviceType=text(item.serviceType);
     if(description)service.description=description;
     if(serviceType)service.serviceType=serviceType;
-    return {"@type":"Offer","itemOffered":service};
-  }).filter((item):item is Record<string,unknown>=>!!item);
+    result.push({"@type":"Offer","itemOffered":service});
+  }
+  return result;
 }
 function cleanFaqs(input:EntityInput["faqs"]):Record<string,unknown>[] {
-  if(!Array.isArray(input))return [];
-  return input.map(item=>{
+  const result:Record<string,unknown>[]=[];
+  if(!Array.isArray(input))return result;
+  for(const item of input){
     const question=text(item?.question),answer=text(item?.answer);
-    if(!question||!answer)return undefined;
-    return {"@type":"Question",name:question,acceptedAnswer:{"@type":"Answer",text:answer}};
-  }).filter((item):item is Record<string,unknown>=>!!item);
+    if(!question||!answer)continue;
+    result.push({"@type":"Question",name:question,acceptedAnswer:{"@type":"Answer",text:answer}});
+  }
+  return result;
 }
 
 export function generateMachinePack(input:EntityInput):MachinePack {
