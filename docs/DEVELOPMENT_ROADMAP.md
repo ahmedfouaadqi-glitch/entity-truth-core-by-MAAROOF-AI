@@ -58,6 +58,7 @@ This roadmap supersedes the earlier proposal to implement an optional external-v
 **Goal:** generate and structurally check more useful profiles from values the user explicitly supplies.
 
 - [x] Add supported local output types with explicit input and validation contracts: LocalBusiness, ProfessionalService, Service, ContactPoint, PostalAddress, and OpeningHoursSpecification.
+- [x] Flag `ProfessionalService` as deprecated (legacy compatibility only) and canonicalize user-entered weekday names to Schema.org DayOfWeek identifiers.
 - [x] Add nested FAQPage only from user-entered questions and answers.
 - [x] Keep sameAs limited to user-supplied links; do not fetch or verify them.
 - [x] Keep areaServed limited to explicit user-supplied markets; no inferred markets or worldwide coverage.
