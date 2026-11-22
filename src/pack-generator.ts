@@ -106,10 +106,10 @@ export function generateMachinePack(input:EntityInput):MachinePack {
   if(!markets.length) warnings.push("No served markets were supplied; Worldwide coverage is not assumed.");
   if(!languages.length) warnings.push("No entity languages were supplied; the tool's interface languages are not assigned to the entity.");
   if(input.address&&!address)warnings.push("Postal address omitted: no non-empty address fields were supplied.");
-  if(input.contactPoints?.length&&!contactPoints.length)warnings.push("Contact points omitted: no usable contact fields were supplied.");
-  if(input.openingHours?.length&&!openingHours.length)warnings.push("Opening hours omitted: no usable day or time fields were supplied.");
-  if(input.services?.length&&!services.length)warnings.push("Services omitted: each service needs a non-empty name.");
-  if(input.faqs?.length&&!faqs.length)warnings.push("FAQ page omitted: each item needs both a non-empty question and answer.");
+  if((input.contactPoints?.length??0)>contactPoints.length)warnings.push("One or more contact points were omitted because they contained no usable contact fields.");
+  if((input.openingHours?.length??0)>openingHours.length)warnings.push("One or more opening-hours records were omitted because they contained no usable day or time fields.");
+  if((input.services?.length??0)>services.length)warnings.push("One or more service entries were omitted because each service needs a non-empty name.");
+  if((input.faqs?.length??0)>faqs.length)warnings.push("One or more FAQ entries were omitted because each item needs a non-empty question and answer.");
   if((schemaType==="Organization"||schemaType==="Service")&&openingHours.length){
     warnings.push("Opening hours omitted for this primary type; use LocalBusiness or ProfessionalService to publish business hours.");
   }
