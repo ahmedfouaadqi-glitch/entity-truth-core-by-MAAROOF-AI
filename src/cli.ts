@@ -29,6 +29,7 @@ Options:
   --hours <json>     Opening-hours JSON object; repeatable
   --faq <Q::A>       User-written FAQ question and answer; repeatable
   --out-dir <dir>    Write local output files
+  --report <md|html|both>  Add a local Markdown and/or HTML report (requires --out-dir)
   --json             Print JSON result
   --force            Allow replacing output files
   --help             Show this help
