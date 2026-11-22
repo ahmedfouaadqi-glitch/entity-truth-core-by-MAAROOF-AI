@@ -278,3 +278,19 @@ test("opening-hours day names are normalized to Schema.org DayOfWeek identifiers
   ]);
   assert.equal(validateEntityProfile(result.jsonLd).valid,true);
 });
+
+
+test("browser playground labels ProfessionalService as deprecated and explains weekday normalization",async()=>{
+  const html=await readFile(new URL("../playground/index.html",import.meta.url),"utf8");
+  assert.match(html,/value="ProfessionalService">ProfessionalService \(deprecated\)/);
+  assert.match(html,/canonical Schema\.org identifiers/);
+  assert.match(html,/مُعرّفات Schema\.org القياسية/);
+});
+
+test("CLI emits a deprecation warning for legacy ProfessionalService type",()=>{
+  const out=execFileSync(process.execPath,[
+    resolve("dist/cli.js"),"Example Practice","--type","ProfessionalService","--json"
+  ],{encoding:"utf8"});
+  const result=JSON.parse(out);
+  assert.ok(result.machinePack.warnings.some(item=>/ProfessionalService is deprecated in Schema\.org/i.test(item)));
+});
