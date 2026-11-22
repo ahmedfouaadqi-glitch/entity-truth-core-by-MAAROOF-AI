@@ -126,6 +126,12 @@ Build the static output:
 
 The generated _site/ directory contains only the static page and the compiled core. Deploy that directory to hosting you own. Templates and exact settings are documented in docs/DEPLOYMENT.md.
 
+## Documentation languages
+
+- English: this README and the linked guides.
+- Sorani Kurdish: [Local quickstart](docs/QUICKSTART.ku.md).
+- Arabic: the browser playground and report output are localized; full Arabic documentation remains a future documentation task.
+
 ## Supported interface and analysis languages
 
 - Arabic (ar)
