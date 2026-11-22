@@ -207,3 +207,31 @@ test("validator rejects malformed opening hours and offer catalogs",()=>{
 test("unsupported schema type is rejected rather than silently generated",()=>{
   assert.throws(()=>executeEntityProfileGenerate({name:"Example",schemaType:"MedicalOrganization"}),/schemaType must be/);
 });
+
+
+test("MCP profile generation preserves business address, contacts, opening hours and services",()=>{
+  const result=executeEntityProfileGenerate({
+    name:"Sample Studio",
+    schemaType:"ProfessionalService",
+    address:{addressLocality:"Baghdad",addressCountry:"Iraq"},
+    contactPoints:[{email:"contact@example.test"}],
+    openingHours:[{dayOfWeek:["Sunday"],opens:"10:00",closes:"16:00"}],
+    services:[{name:"Design"}]
+  });
+  assert.equal(result.jsonLd["@type"],"ProfessionalService");
+  assert.equal(result.jsonLd.address.addressCountry,"Iraq");
+  assert.equal(result.jsonLd.contactPoint[0].email,"contact@example.test");
+  assert.equal(result.jsonLd.openingHoursSpecification[0].dayOfWeek[0],"Sunday");
+  assert.equal(result.jsonLd.hasOfferCatalog.itemListElement[0].itemOffered.name,"Design");
+});
+
+test("browser playground exposes local business, address, contact, hours and FAQ inputs", async()=>{
+  const html=await readFile(new URL("../playground/index.html",import.meta.url),"utf8");
+  for(const field of ["schemaType","streetAddress","addressLocality","addressRegion","postalCode","addressCountry","contactEmail","contactPhone","services","openingHours","faqs"]){
+    assert.match(html,new RegExp('id="'+field+'"'));
+  }
+  assert.match(html,/value="LocalBusiness"/);
+  assert.match(html,/value="ProfessionalService"/);
+  assert.match(html,/JSON\.parse\(\$\("openingHours"\)\.value\)/);
+  assert.match(html,/schemaType:\s*\$\("schemaType"\)\.value/);
+});
