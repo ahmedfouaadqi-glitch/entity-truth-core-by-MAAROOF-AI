@@ -167,7 +167,7 @@ export function validateEntityProfile(value:unknown,lang:SupportedLang="en"):Ent
 
   if(value.openingHoursSpecification!==undefined){
     const records=asArray(value.openingHoursSpecification);
-    const weekdays=new Set(["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]);
+    const weekdays=new Set(["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"].map(day=>"https://schema.org/"+day));
     if(!records?.length||records.some(item=>{
       if(!isRecord(item)||item["@type"]!=="OpeningHoursSpecification")return true;
       const days=asArray(item.dayOfWeek);
