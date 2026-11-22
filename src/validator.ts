@@ -195,6 +195,7 @@ export function validateEntityProfile(value:unknown,lang:SupportedLang="en"):Ent
     warnings.push("FAQ text is user supplied; neither completeness nor factual accuracy is independently checked.");
   }
   if(value.serviceType!==undefined&&!isText(value.serviceType))add("$.serviceType","invalid_service_type","invalidServiceType");
+  if(type==="ProfessionalService")warnings.push("ProfessionalService is deprecated in Schema.org; consider LocalBusiness or Service as appropriate.");
   if(type==="LocalBusiness"||type==="ProfessionalService"){
     if(value.address===undefined)warnings.push("No postal address was supplied for this business profile.");
   }
