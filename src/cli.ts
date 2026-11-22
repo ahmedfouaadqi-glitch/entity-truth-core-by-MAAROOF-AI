@@ -2,7 +2,7 @@
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import { constants } from "node:fs";
 import { join, resolve } from "node:path";
-import { auditEntity } from "./index.js";
+import { auditEntity, generateEntityReports } from "./index.js";
 import type { AnalysisWindow, ContactPointInput, EntityInput, EntitySchemaType, FAQItemInput, OpeningHoursSpecificationInput, PostalAddressInput, ServiceInput, SupportedLang } from "./types.js";
 
 function help(){console.log(`Entity Truth Core — local entity profile preparation
@@ -89,7 +89,7 @@ function mergeCliFields(raw:EntityInput,extra:{
 async function main(){
   try{
     const args=process.argv.slice(2);
-    let name="",text="",description="",url="",lang:SupportedLang="en",langSpecified=false,inputFile="",outDir="",asJson=false,force=false,window:AnalysisWindow=100,windowSpecified=false;
+    let name="",text="",description="",url="",lang:SupportedLang="en",langSpecified=false,inputFile="",outDir="",asJson=false,force=false,window:AnalysisWindow=100,windowSpecified=false,reportFormat:"md"|"html"|"both"|undefined;
     let schemaType:EntitySchemaType|undefined,contactType:string|undefined,serviceType:string|undefined;
     const markets:string[]=[],aliases:string[]=[],profiles:string[]=[],facts:string[]=[],emails:string[]=[],phones:string[]=[],serviceNames:string[]=[];
     const hours:OpeningHoursSpecificationInput[]=[],faqs:FAQItemInput[]=[];
@@ -103,7 +103,7 @@ async function main(){
       else if(a==="--text"){[text,i]=value(args,i,a);}
       else if(a==="--description"){[description,i]=value(args,i,a);}
       else if(a==="--url"){[url,i]=value(args,i,a);}
-      else if(a==="--out-dir"){[outDir,i]=value(args,i,a);}
+      else if(a==="--out-dir"){[outDir,i]=value(args,i,a);}\n      else if(a==="--report"){const v=value(args,i,a);i=v[1];if(!["md","html","both"].includes(v[0]))throw new Error("Report format must be md, html, or both.");reportFormat=v[0] as "md"|"html"|"both";}
       else if(a==="--lang"){const v=value(args,i,a);i=v[1];if(!["ar","ku","en"].includes(v[0]))throw new Error("Language must be ar, ku or en.");lang=v[0] as SupportedLang;langSpecified=true;}
       else if(a==="--type"){const v=value(args,i,a);i=v[1];schemaType=parseSchemaType(v[0]);}
       else if(a==="--window"){const v=value(args,i,a);i=v[1];window=parseWindow(v[0]);windowSpecified=true;}
@@ -159,6 +159,7 @@ async function main(){
     if(outDir){
       const folder=resolve(outDir);await mkdir(folder,{recursive:true});
       const outputs:[string,string][]=[["audit-report.json",JSON.stringify(result,null,2)+"\n"],["organization.jsonld",JSON.stringify(result.machinePack.jsonLd,null,2)+"\n"],["llms.txt",result.machinePack.llmsTxt]];
+      if(reportFormat){const reports=generateEntityReports(input,result);if(reportFormat==="md"||reportFormat==="both")outputs.push(["entity-report.md",reports.markdown+"\n"]);if(reportFormat==="html"||reportFormat==="both")outputs.push(["entity-report.html",reports.html]);}
       if(!force){const existing:string[]=[];for(const [file] of outputs){try{await access(join(folder,file),constants.F_OK);existing.push(file);}catch{}}if(existing.length)throw new Error("Refusing to overwrite: "+existing.join(", ")+". Use --force to replace.");}
       for(const [file,content] of outputs)await writeFile(join(folder,file),content,{encoding:"utf8",flag:force?"w":"wx"});
     }
@@ -172,6 +173,7 @@ async function main(){
       console.log("Name hints: "+result.disambiguation.heuristicRisk);
       console.log("Notice: local heuristic only; no global search, external verification or AI visibility measurement.");
       if(outDir)console.log("Files saved to "+resolve(outDir));
+      if(reportFormat)console.log("Report format: "+reportFormat);
     }
   }catch(e){console.error("entity-truth: "+(e instanceof Error?e.message:String(e)));process.exitCode=1;}
 }
