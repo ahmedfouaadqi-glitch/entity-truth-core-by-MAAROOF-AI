@@ -7,6 +7,7 @@ const runtimeFiles = [
   "src/scanner.ts",
   "src/pack-generator.ts",
   "src/validator.ts",
+  "src/report-generator.ts",
   "src/cli.ts",
   "src/mcp/server.ts",
   "src/mcp/tools.ts",
