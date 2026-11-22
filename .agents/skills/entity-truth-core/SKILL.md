@@ -37,14 +37,14 @@ The primary `schemaType` values are:
 
 - `Organization` (default)
 - `LocalBusiness`
-- `ProfessionalService`
+- `ProfessionalService` (legacy input only; deprecated in Schema.org—prefer `LocalBusiness` for a local provider or `Service` for a service description).
 - `Service`
 
 Optional nested fields accepted by `entity_scan` and `entity_profile_generate` are:
 
 - `address`: a user-supplied PostalAddress with `streetAddress`, `addressLocality`, `addressRegion`, `postalCode`, and/or `addressCountry`.
 - `contactPoints`: user-supplied ContactPoint records with `contactType`, `telephone`, `email`, and `availableLanguage`.
-- `openingHours`: OpeningHoursSpecification records with weekday names and 24-hour `opens` / `closes` values; optional validity dates use YYYY-MM-DD.
+- `openingHours`: OpeningHoursSpecification records with English weekday names and 24-hour `opens` / `closes` values; the generator emits canonical `https://schema.org/Weekday` identifiers. Optional validity dates use YYYY-MM-DD.
 - `services`: user-supplied service names and optional descriptions or service types, emitted as OfferCatalog entries.
 - `faqs`: user-written question / answer pairs, emitted as a nested FAQPage.
 - `serviceType`: the service classification for a primary `Service` profile.
