@@ -22,7 +22,7 @@ test("release process requires merged main, CI, protected tags and owner publica
   const release=await readFile(new URL("../docs/RELEASE_PROCESS.md",import.meta.url),"utf8");
   assert.match(release,/official.*main.*branch/i);
   assert.match(release,/Node.js 20 and 22/);
-  assert.match(release,/protected.*tag ruleset/i);
+  assert.match(release,/official.*tag ruleset are Active/i);
   assert.match(release,/separate owner decision/i);
   assert.match(release,/unmerged branch/i);
 });
