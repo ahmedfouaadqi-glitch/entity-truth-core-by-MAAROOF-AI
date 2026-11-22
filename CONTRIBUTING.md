@@ -36,6 +36,9 @@ CI verifies Node.js 20 and Node.js 22. Run the full test command before submitti
 6. Keep network calls out of runtime source code.
 7. Add regression tests for Arabic, Sorani Kurdish and English behavior where relevant.
 8. Avoid changing working modules unless the requested improvement requires it.
+9. Update `package-lock.json` with npm whenever dependency manifests change; explain the purpose of every new dependency.
+10. Review Dependabot proposals through the same Node 20 / 22 CI checks; do not merge broad or breaking upgrades without a compatibility review.
+11. Keep `SECURITY.md`, the changelog and release process current when their policies or supported contracts change.
 
 ## Pull requests
 
@@ -46,3 +49,7 @@ A pull request should explain:
 - Confirmation that the change remains inside Product Scope.
 
 Do not submit a PR that expands the project into external research or verification. Such a PR will be closed as out of scope.
+
+## Security reports
+
+Follow [SECURITY.md](SECURITY.md). Do not post vulnerability details or credentials in public issues. Verify that GitHub private vulnerability reporting is enabled before advertising it as an active reporting channel.
