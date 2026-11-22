@@ -221,7 +221,7 @@ test("MCP profile generation preserves business address, contacts, opening hours
   assert.equal(result.jsonLd["@type"],"ProfessionalService");
   assert.equal(result.jsonLd.address.addressCountry,"Iraq");
   assert.equal(result.jsonLd.contactPoint[0].email,"contact@example.test");
-  assert.equal(result.jsonLd.openingHoursSpecification[0].dayOfWeek[0],"Sunday");
+  assert.equal(result.jsonLd.openingHoursSpecification[0].dayOfWeek[0],"https://schema.org/Sunday");
   assert.equal(result.jsonLd.hasOfferCatalog.itemListElement[0].itemOffered.name,"Design");
 });
 
@@ -254,4 +254,27 @@ test("generator reports partially omitted malformed user-supplied nested values"
   assert.ok(result.warnings.some(item=>/One or more service entries were omitted/));
   assert.ok(result.warnings.some(item=>/One or more FAQ entries were omitted/));
   assert.ok(result.warnings.some(item=>/One or more opening-hours records were omitted/));
+});
+
+
+test("legacy ProfessionalService schema type is retained with an explicit deprecation warning",()=>{
+  const result=executeEntityProfileGenerate({name:"Example Practice",schemaType:"ProfessionalService"});
+  assert.equal(result.jsonLd["@type"],"ProfessionalService");
+  assert.ok(result.warnings.some(item=>/ProfessionalService is deprecated in Schema.org/i.test(item)));
+  const validation=validateEntityProfile(result.jsonLd);
+  assert.ok(validation.warnings.some(item=>/ProfessionalService is deprecated in Schema.org/i.test(item)));
+});
+
+test("opening-hours day names are normalized to Schema.org DayOfWeek identifiers",()=>{
+  const result=executeEntityProfileGenerate({
+    name:"Example Business",
+    schemaType:"LocalBusiness",
+    openingHours:[{dayOfWeek:["Monday","tuesday","https://schema.org/Friday"],opens:"09:00",closes:"17:00"}]
+  });
+  assert.deepEqual(result.jsonLd.openingHoursSpecification[0].dayOfWeek,[
+    "https://schema.org/Monday",
+    "https://schema.org/Tuesday",
+    "https://schema.org/Friday"
+  ]);
+  assert.equal(validateEntityProfile(result.jsonLd).valid,true);
 });
