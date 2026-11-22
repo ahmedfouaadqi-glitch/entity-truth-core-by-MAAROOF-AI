@@ -138,6 +138,12 @@ Language coverage is limited to the built-in heuristics and UI; it is not compre
 
 The core performs deterministic local processing. The browser playground processes entity data in the browser. The MCP server communicates with its host over local stdio. No entity input is sent to MAAROOF AI or a hosted processing service.
 
+## Security and maintenance
+
+- See [SECURITY.md](SECURITY.md) for private vulnerability disclosure guidance. The repository owner must enable and verify GitHub private vulnerability reporting separately.
+- Dependency update schedules are defined in `.github/dependabot.yml`; they take effect from the default branch after this change is merged. Dependabot alerts and security updates are controlled separately in repository settings.
+- Official versioning, tags and publication gates are documented in [docs/RELEASE_PROCESS.md](docs/RELEASE_PROCESS.md). No release or package publication is implied.
+
 ## License
 
 MIT. See LICENSE.
