@@ -17,7 +17,7 @@ test("CSV parser preserves quoted commas, escaped quotes and multiline descripti
 
 test("CSV parser maps supported business fields and pipe-separated lists",()=>{
   const csv='entityName,schemaType,lang,window,alternateName,servedMarkets,entityLanguages,officialProfiles,facts,streetAddress,addressLocality,addressCountry,contactEmail,contactPhone,contactType,contactLanguages,services,serviceType,openingHoursSpecification,faqItems\n'+
-  'Example Clinic,LocalBusiness,ar,500,عيادة المثال|Example Clinic,Iraq|Jordan,ar|en,https://example.test|https://example.test/contact,Founded in 2020,1 Example Street,Baghdad,Iraq,hello@example.test,+00000000000,appointments,ar|en,Consultation|Testing,, "[{""dayOfWeek"":[""Monday""],""opens"":""09:00"",""closes"":""17:00""}]", "[{""question"":""What are your hours?"",""answer"":""09:00 to 17:00""}]"';
+  'Example Clinic,LocalBusiness,ar,500,عيادة المثال|Example Clinic,Iraq|Jordan,ar|en,https://example.test|https://example.test/contact,Founded in 2020,1 Example Street,Baghdad,Iraq,hello@example.test,+00000000000,appointments,ar|en,Consultation|Testing,,"[{""dayOfWeek"":[""Monday""],""opens"":""09:00"",""closes"":""17:00""}]", "[{""question"":""What are your hours?"",""answer"":""09:00 to 17:00""}]"';
   const parsed=parseEntityCsv(csv);
   const row=parsed.rows[0];
   assert.ok(row.input);
