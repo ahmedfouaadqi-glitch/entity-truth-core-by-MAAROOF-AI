@@ -14,6 +14,6 @@ export function executeEntityProfileGenerate(input: EntityInput) {
   return generateMachinePack(input);
 }
 
-export function executeEntityProfileValidate(jsonLd: unknown) {
-  return validateEntityProfile(jsonLd);
+export function executeEntityProfileValidate(jsonLd: unknown, lang: SupportedLang = "en") {
+  return validateEntityProfile(jsonLd, lang);
 }
