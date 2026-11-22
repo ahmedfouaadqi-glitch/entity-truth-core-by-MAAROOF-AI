@@ -186,7 +186,7 @@ $("entityForm").addEventListener("submit", (event) => {
     return;
   }
   $("formError").hidden = true;
-  const services = $("services").value.split(/\\r?\\n/).map((item) => item.trim()).filter(Boolean);
+  const services = $("services").value.split(/\r?\n/).map((item) => item.trim()).filter(Boolean);
   const contactPoints = (email || phone || contactType) ? [{...(email ? {email} : {}), ...(phone ? {telephone:phone} : {}), ...(contactType ? {contactType} : {})}] : [];
   const result = auditEntity({
     name,
