@@ -219,3 +219,28 @@ test("user-supplied Arabic and Latin aliases remain draft alternateName values",
   assert.deepEqual(pack.jsonLd.alternateName,["Example Company LLC","شركة المثال التجارية"]);
   assert.ok(pack.warnings.every(warning=>! /verified|official ownership/i.test(warning) || /not independently verified|not verified/i.test(warning)));
 });
+
+
+test("CLI builds a LocalBusiness profile from explicit local flags",()=>{
+  const hours=JSON.stringify({dayOfWeek:["Monday","Tuesday"],opens:"09:00",closes:"17:00"});
+  const out=execFileSync(process.execPath,[
+    resolve("dist/cli.js"),"Example Clinic",
+    "--type","LocalBusiness",
+    "--street-address","1 Example Street",
+    "--city","Baghdad",
+    "--country","Iraq",
+    "--email","hello@example.test",
+    "--phone","+00000000000",
+    "--service","Consultation",
+    "--hours",hours,
+    "--faq","What are your hours?::Monday to Friday",
+    "--json"
+  ],{encoding:"utf8"});
+  const result=JSON.parse(out);
+  assert.equal(result.machinePack.jsonLd["@type"],"LocalBusiness");
+  assert.equal(result.machinePack.jsonLd.address.addressLocality,"Baghdad");
+  assert.equal(result.machinePack.jsonLd.contactPoint[0].email,"hello@example.test");
+  assert.equal(result.machinePack.jsonLd.openingHoursSpecification[0].opens,"09:00");
+  assert.equal(result.machinePack.jsonLd.hasOfferCatalog.itemListElement[0].itemOffered.name,"Consultation");
+  assert.equal(result.machinePack.jsonLd.subjectOf["@type"],"FAQPage");
+});
