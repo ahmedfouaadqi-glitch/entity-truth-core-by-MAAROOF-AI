@@ -74,7 +74,7 @@ test("Codex and Claude skills are byte-identical to the canonical skill", async 
 test("browser playground consumes the shared TypeScript build instead of duplicating scanner rules", async () => {
   const html = await readFile(new URL("../playground/index.html", import.meta.url), "utf8");
   assert.match(html, /type="module"/);
-  assert.match(html, /import\s*\{\s*auditEntity\s*\}\s*from\s*["']\.\.\/dist\/index\.js["']/);
+  assert.match(html, /import\s*\{\s*auditEntity,\s*generateEntityReports\s*\}\s*from\s*["']\.\.\/dist\/index\.js["']/);
   assert.doesNotMatch(html, /function\s+(?:scan|first100)\s*\(/);
   assert.doesNotMatch(html, /const\s+COMMON_TERMS\s*=/);
 });
