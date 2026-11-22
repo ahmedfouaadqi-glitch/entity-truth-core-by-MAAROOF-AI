@@ -38,3 +38,10 @@ test("runtime dependencies do not add MAAROOF AI or model-provider SDKs", async 
   );
   assert.deepEqual(forbidden, []);
 });
+
+
+test("browser playground does not imply a MAAROOF AI runtime integration", async () => {
+  const html = await readFile(new URL("../playground/index.html", import.meta.url), "utf8");
+  assert.doesNotMatch(html, /href=["']https?:\/\/maaroofai\.com/i);
+  assert.match(html, /independent local utility|أداة مستقلة ومحلية|سەربەخۆ و ناوخۆیی/u);
+});
