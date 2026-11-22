@@ -235,3 +235,23 @@ test("browser playground exposes local business, address, contact, hours and FAQ
   assert.match(html,/JSON\.parse\(\$\("openingHours"\)\.value\)/);
   assert.match(html,/schemaType:\s*\$\("schemaType"\)\.value/);
 });
+
+
+test("generator reports partially omitted malformed user-supplied nested values",()=>{
+  const result=executeEntityProfileGenerate({
+    name:"Example Business",
+    schemaType:"LocalBusiness",
+    services:[{name:"Consulting"},{name:"  "}],
+    faqs:[{question:"How can I contact you?",answer:"Email us."},{question:"",answer:""}],
+    openingHours:[
+      {dayOfWeek:["Monday"],opens:"09:00",closes:"17:00"},
+      {dayOfWeek:[],opens:"",closes:""}
+    ]
+  });
+  assert.equal(result.jsonLd.hasOfferCatalog.itemListElement.length,1);
+  assert.equal(result.jsonLd.subjectOf.mainEntity.length,1);
+  assert.equal(result.jsonLd.openingHoursSpecification.length,1);
+  assert.ok(result.warnings.some(item=>/One or more service entries were omitted/));
+  assert.ok(result.warnings.some(item=>/One or more FAQ entries were omitted/));
+  assert.ok(result.warnings.some(item=>/One or more opening-hours records were omitted/));
+});
