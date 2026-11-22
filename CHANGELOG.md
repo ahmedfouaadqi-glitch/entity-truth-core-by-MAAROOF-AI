@@ -11,6 +11,9 @@
 ## Unreleased — local agent and self-hosting milestone
 
 ### Scope and local scan window
+- Added local JSON-LD drafts for Organization, LocalBusiness, ProfessionalService and Service, with optional PostalAddress, ContactPoint, OpeningHoursSpecification, OfferCatalog / Service and FAQPage structures from user-provided fields only.
+- Expanded the local structural validator with precise field paths and English / Arabic messages; no link reachability, ownership or factual verification is performed.
+- Exposed the same local profile fields through CLI flags / JSON input, MCP tools and the browser playground.
 - Added a 30-case synthetic regression corpus covering English, Arabic, Sorani Kurdish and mixed RTL/LTR profile text, plus empty/short-input and source-preservation boundary checks.
 - CI now exercises 80 tests on each of Node.js 20 and 22, including the local-only architecture guard.
 - Added local Arabic-Indic and Persian digit normalization, Arabic percent and numeric separators, diacritic/tatweel removal and carefully scoped alef normalization while preserving original candidate text.
