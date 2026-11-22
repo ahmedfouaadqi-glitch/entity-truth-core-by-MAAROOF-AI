@@ -134,7 +134,7 @@ async function main(){
       else throw new Error("Unexpected argument: "+a);
     }
 
-    const cliFields={schemaType,address,emails,phones,contactType,services:serviceNames,serviceType,hours,faqs};
+    const cliFields={...(schemaType?{schemaType}:{}),address,emails,phones,...(contactType?{contactType}:{}),services:serviceNames,...(serviceType?{serviceType}:{}),hours,faqs};
     let input:EntityInput;
     if(inputFile){
       const raw=JSON.parse(await readFile(resolve(inputFile),"utf8")) as EntityInput;
