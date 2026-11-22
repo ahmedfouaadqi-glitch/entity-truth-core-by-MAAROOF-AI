@@ -181,6 +181,8 @@ export function generateEntityReports(input:EntityInput,result:EntityAuditResult
     "",
     "## "+t.scope,
     "",
+    ...result.factDensity.limitations.map(item=>"- "+markdownEscape(item)),
+    ...result.disambiguation.limitations.map(item=>"- "+markdownEscape(item)),
     ...result.scopeNotice.map(item=>"- "+markdownEscape(item)),
     "- "+t.localNotice,
     "- "+t.noExternal,
@@ -222,7 +224,7 @@ export function generateEntityReports(input:EntityInput,result:EntityAuditResult
 "<section><h2>"+htmlEscape(t.warnings)+"</h2>"+htmlList(result.machinePack.warnings,t.none)+"</section>\n"+
 "<section><h2>"+htmlEscape(t.draftJson)+"</h2><pre>"+htmlEscape(json)+"</pre></section>\n"+
 "<section><h2>"+htmlEscape(t.draftLlms)+"</h2><pre>"+htmlEscape(llms.trimEnd())+"</pre></section>\n"+
-"<section><h2>"+htmlEscape(t.scope)+"</h2>"+htmlList([...result.scopeNotice,t.localNotice,t.noExternal],t.none)+"</section>\n"+
+"<section><h2>"+htmlEscape(t.scope)+"</h2>"+htmlList([...result.factDensity.limitations,...result.disambiguation.limitations,...result.scopeNotice,t.localNotice,t.noExternal],t.none)+"</section>\n"+
 "<footer>"+htmlEscape(t.footer)+"</footer>\n</main>\n</body>\n</html>\n";
   return {markdown,html};
 }
