@@ -50,6 +50,21 @@ From a local checkout:
 
     node dist/cli.js "Example Company" --text "Founded in 2018, ISO 9001 certified." --lang en --window 500 --out-dir ./entity-profile
 
+### Local business profile
+
+Select the schema type and pass only fields supplied by the user:
+
+```bash
+node dist/cli.js "Example Clinic" --type LocalBusiness \
+  --street-address "1 Example Street" --city "Baghdad" --country "Iraq" \
+  --email "hello@example.test" --phone "+00000000000" \
+  --service "Consultation" \
+  --hours '{"dayOfWeek":["Monday"],"opens":"09:00","closes":"17:00"}' \
+  --faq "What are your hours?::Monday to Friday" --json
+```
+
+For complex input, JSON files may also include `schemaType`, `address`, `contactPoints`, `openingHours`, `services`, `faqs`, and `serviceType`. The generator does not infer missing fields.
+
 Or pass a JSON file containing name, optional URL and description, user-supplied markets, entity languages and opening text:
 
     node dist/cli.js --input ./entity.json --json
