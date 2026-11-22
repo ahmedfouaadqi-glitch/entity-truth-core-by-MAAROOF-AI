@@ -11,7 +11,7 @@ npm install
 npm run build
 ```
 
-The MCP entry point is `dist/mcp/server.js`. It uses stdio and does not open a network port.
+The MCP entry point is `dist/mcp/server.js`. It uses stdio and does not open a network port. Entity scans accept the optional `window` value `100`, `500`, or `full`; the default is `100`.
 
 ## 2. OpenAI Codex
 
@@ -74,10 +74,10 @@ A language model without an agent runtime, MCP client, filesystem access, or com
 |---|---|
 | `entity_scan` | Full local audit and draft generation |
 | `entity_name_hint` | Limited static name heuristic |
-| `entity_profile_generate` | Draft Organization JSON-LD and llms.txt-style text |
-| `entity_profile_validate` | Limited local structural check of Organization JSON-LD |
+| `entity_profile_generate` | Draft Organization, LocalBusiness, ProfessionalService or Service JSON-LD and llms.txt-style text |
+| `entity_profile_validate` | Limited local structural check of supported profile and nested JSON-LD structures |
 
-All inputs are processed locally. The server does not implement remote HTTP transport in this release.
+The scan and generation tools accept `schemaType` (`Organization`, `LocalBusiness`, or `Service`; legacy `ProfessionalService` is accepted with a deprecation warning) and optional user-supplied `address`, `contactPoints`, `openingHours`, `services`, `faqs`, and `serviceType`. The validation tool accepts `lang` (`ar`, `ku`, or `en`) and performs a limited local check of the supported subset. Contact details, hours, addresses, service descriptions and FAQs are not externally checked. Opening-hours weekday names entered as English labels are emitted as canonical `https://schema.org/Weekday` identifiers. The `entity_scan` tool accepts `window: 100`, `window: 500`, or `window: "full"`. The local scanner can surface candidate years, percentages, standards, scale, currencies, email addresses, formatted/labelled phone numbers, labelled addresses and labelled service lists. These are not validated. All inputs are processed locally. The server does not implement remote HTTP transport in this release.
 
 ## 6. User-level skill installation
 
