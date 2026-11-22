@@ -13,6 +13,7 @@ The project is independently usable through its TypeScript core, CLI, local MCP 
 - Conservative extraction of email, formatted or labelled phone numbers, labelled addresses and labelled service lists from supplied text; these remain unverified text candidates.
 - Arabic, Sorani Kurdish and English normalization and heuristic improvements that do not require external services.
 - Generation of draft Schema.org `Organization`, `LocalBusiness`, `ProfessionalService` and `Service` profiles from explicit user input.
+- `ProfessionalService` remains accepted only for compatibility with the initial roadmap; it is deprecated in Schema.org and generated output carries a warning. Prefer `LocalBusiness` or `Service` according to the entity being described.
 - Optional `PostalAddress`, `ContactPoint`, `OpeningHoursSpecification`, `OfferCatalog` / `Service` entries and `FAQPage` content, only when supplied by the user.
 - A limited local validator for the emitted entity and nested-field structures, with English and Arabic error messages.
 - Local structural validation of supported output structures, with clearly stated limitations.
