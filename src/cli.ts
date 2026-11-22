@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import { constants } from "node:fs";
-import { join, resolve } from "node:path";
-import { auditEntity, generateEntityReports } from "./index.js";
+import { join, relative, resolve } from "node:path";
+import { auditEntity, generateEntityReports, parseEntityCsv } from "./index.js";
 import type { AnalysisWindow, ContactPointInput, EntityInput, EntitySchemaType, FAQItemInput, OpeningHoursSpecificationInput, PostalAddressInput, ServiceInput, SupportedLang } from "./types.js";
 
 function help(){console.log(`Entity Truth Core — local entity profile preparation
@@ -33,7 +33,7 @@ Options:
   --json             Print JSON result
   --force            Allow replacing output files
   --help             Show this help
-Privacy: local-only. No website fetching, network call or API is used.
+CSV lists use | between values; openingHours and faqs cells use JSON arrays. Invalid rows are recorded in batch-summary.json without blocking other rows.\nPrivacy: local-only. No website fetching, network call or API is used.
 Complex nested fields can also be supplied in the --input JSON file.`);}
 function value(args:string[],i:number,flag:string):[string,number]{const v=args[i+1];if(!v||v.startsWith("--"))throw new Error(flag+" requires a value.");return[v,i+1];}
 function parseWindow(value:string):AnalysisWindow {
@@ -87,10 +87,96 @@ function mergeCliFields(raw:EntityInput,extra:{
     ...(extra.serviceType?{serviceType:extra.serviceType}:{})
   };
 }
+
+function safeEntitySlug(name:string):string {
+  const slug=name.normalize("NFKD").toLowerCase()
+    .replace(/[\u0300-\u036f]/g,"")
+    .replace(/[^a-z0-9]+/g,"-")
+    .replace(/^-+|-+$/g,"")
+    .slice(0,40);
+  return slug||"entity";
+}
+
+async function runCsvBatch(csvText:string,outDir:string,reportFormat:"md"|"html"|"both"|undefined,force:boolean){
+  const parsed=parseEntityCsv(csvText);
+  if(parsed.rows.length===0)throw new Error("CSV contains a header but no entity rows.");
+  const root=resolve(outDir);
+  await mkdir(root,{recursive:true});
+  const summaryPath=join(root,"batch-summary.json");
+  if(!force){
+    try{await access(summaryPath,constants.F_OK);throw new Error("Refusing to overwrite batch-summary.json; use --force.");}
+    catch(error){if(error instanceof Error&&error.message.startsWith("Refusing"))throw error;}
+  }
+
+  const outcomes:Array<Record<string,unknown>>=[];
+  let processedRows=0,failedRows=0;
+  for(const row of parsed.rows){
+    if(!row.input||row.error){
+      failedRows++;
+      outcomes.push({rowNumber:row.rowNumber,status:"failed",error:row.error??"CSV row did not produce an entity input."});
+      continue;
+    }
+    try{
+      const input=row.input;
+      const result=auditEntity(input);
+      const folderName=String(row.rowNumber).padStart(4,"0")+"-"+safeEntitySlug(result.entity);
+      const folder=join(root,folderName);
+      await mkdir(folder,{recursive:true});
+      const outputs:[string,string][]=[
+        ["audit-report.json",JSON.stringify(result,null,2)+"\n"],
+        ["organization.jsonld",JSON.stringify(result.machinePack.jsonLd,null,2)+"\n"],
+        ["llms.txt",result.machinePack.llmsTxt]
+      ];
+      if(reportFormat){
+        const reports=generateEntityReports(input,result);
+        if(reportFormat==="md"||reportFormat==="both")outputs.push(["entity-report.md",reports.markdown+"\n"]);
+        if(reportFormat==="html"||reportFormat==="both")outputs.push(["entity-report.html",reports.html]);
+      }
+      if(!force){
+        const existing:string[]=[];
+        for(const [file] of outputs){
+          try{await access(join(folder,file),constants.F_OK);existing.push(file);}
+          catch{}
+        }
+        if(existing.length)throw new Error("Refusing to overwrite "+existing.join(", ")+" in "+folderName+"; use --force.");
+      }
+      for(const [file,content] of outputs){
+        await writeFile(join(folder,file),content,{encoding:"utf8",flag:force?"w":"wx"});
+      }
+      processedRows++;
+      outcomes.push({
+        rowNumber:row.rowNumber,
+        entity:result.entity,
+        status:"processed",
+        outputDirectory:relative(root,folder)
+      });
+    }catch(error){
+      failedRows++;
+      outcomes.push({
+        rowNumber:row.rowNumber,
+        entity:row.input.name,
+        status:"failed",
+        error:error instanceof Error?error.message:"Unknown batch row error."
+      });
+    }
+  }
+  const summary={
+    generatedAt:new Date().toISOString(),
+    source:"local-csv",
+    totalRows:parsed.rows.length,
+    processedRows,
+    failedRows,
+    reportFormat:reportFormat??"none",
+    rows:outcomes
+  };
+  await writeFile(summaryPath,JSON.stringify(summary,null,2)+"\n",{encoding:"utf8",flag:force?"w":"wx"});
+  return summary;
+}
+
 async function main(){
   try{
     const args=process.argv.slice(2);
-    let name="",text="",description="",url="",lang:SupportedLang="en",langSpecified=false,inputFile="",outDir="",asJson=false,force=false,window:AnalysisWindow=100,windowSpecified=false,reportFormat:"md"|"html"|"both"|undefined;
+    let name="",text="",description="",url="",lang:SupportedLang="en",langSpecified=false,inputFile="",batchCsv="",outDir="",asJson=false,force=false,window:AnalysisWindow=100,windowSpecified=false,reportFormat:"md"|"html"|"both"|undefined;
     let schemaType:EntitySchemaType|undefined,contactType:string|undefined,serviceType:string|undefined;
     const markets:string[]=[],aliases:string[]=[],profiles:string[]=[],facts:string[]=[],emails:string[]=[],phones:string[]=[],serviceNames:string[]=[];
     const hours:OpeningHoursSpecificationInput[]=[],faqs:FAQItemInput[]=[];
@@ -100,7 +186,7 @@ async function main(){
       if(a==="--help"||a==="-h"){help();return;}
       else if(a==="--json")asJson=true;
       else if(a==="--force")force=true;
-      else if(a==="--input"){[inputFile,i]=value(args,i,a);}
+      else if(a==="--input"){[inputFile,i]=value(args,i,a);}\n      else if(a==="--batch-csv"){[batchCsv,i]=value(args,i,a);}
       else if(a==="--text"){[text,i]=value(args,i,a);}
       else if(a==="--description"){[description,i]=value(args,i,a);}
       else if(a==="--url"){[url,i]=value(args,i,a);}
@@ -134,6 +220,19 @@ async function main(){
       else if(a.startsWith("--"))throw new Error("Unknown option: "+a);
       else if(!name)name=a;
       else throw new Error("Unexpected argument: "+a);
+    }
+
+    if(batchCsv){
+      const hasEntityOptions=Boolean(name||inputFile||text||description||url||schemaType||langSpecified||windowSpecified||
+        markets.length||aliases.length||profiles.length||facts.length||emails.length||phones.length||serviceNames.length||
+        hours.length||faqs.length||serviceType||Object.values(address).some(Boolean)||contactType);
+      if(hasEntityOptions)throw new Error("--batch-csv cannot be combined with single-entity input fields; provide those values as CSV columns.");
+      if(!outDir)throw new Error("--batch-csv requires --out-dir.");
+      const summary=await runCsvBatch(await readFile(resolve(batchCsv),"utf8"),outDir,reportFormat,force);
+      if(asJson)console.log(JSON.stringify(summary,null,2));
+      else console.log("CSV batch complete: "+summary.processedRows+" processed, "+summary.failedRows+" failed, "+summary.totalRows+" total. Summary: "+join(resolve(outDir),"batch-summary.json"));
+      if(summary.failedRows>0)process.exitCode=1;
+      return;
     }
 
     const cliFields={...(schemaType?{schemaType}:{}),address,emails,phones,...(contactType?{contactType}:{}),services:serviceNames,...(serviceType?{serviceType}:{}),hours,faqs};
