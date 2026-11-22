@@ -186,7 +186,8 @@ async function main(){
       if(a==="--help"||a==="-h"){help();return;}
       else if(a==="--json")asJson=true;
       else if(a==="--force")force=true;
-      else if(a==="--input"){[inputFile,i]=value(args,i,a);}\n      else if(a==="--batch-csv"){[batchCsv,i]=value(args,i,a);}
+      else if(a==="--input"){[inputFile,i]=value(args,i,a);}
+      else if(a==="--batch-csv"){[batchCsv,i]=value(args,i,a);}
       else if(a==="--text"){[text,i]=value(args,i,a);}
       else if(a==="--description"){[description,i]=value(args,i,a);}
       else if(a==="--url"){[url,i]=value(args,i,a);}
