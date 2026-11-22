@@ -53,9 +53,9 @@ test("HTML report escapes injected markup from entity values and never embeds sc
   const report=generateEntityReports(input,auditEntity(input));
   assert.match(report.html,/&lt;script&gt;/);
   assert.match(report.html,/&lt;img/);
-  assert.doesNotMatch(report.html,/<script(?:\\s|>)/i);
-  assert.doesNotMatch(report.html,/<img(?:\\s|>)/i);
-  assert.doesNotMatch(report.html,/<\\/script>/i);
+  assert.equal(report.html.includes("<script>"),false);
+  assert.equal(report.html.includes("<img "),false);
+  assert.equal(report.html.includes("</script>"),false);
 });
 
 test("Markdown report dynamically lengthens fences for user-supplied backticks",()=>{
