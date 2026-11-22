@@ -57,15 +57,15 @@ This roadmap supersedes the earlier proposal to implement an optional external-v
 
 **Goal:** generate and structurally check more useful profiles from values the user explicitly supplies.
 
-- [ ] Add supported local output types only where there are clear input and validation contracts: LocalBusiness, ProfessionalService, Service, ContactPoint, PostalAddress, and OpeningHoursSpecification.
-- [ ] Add optional FAQPage only from user-entered questions and answers.
-- [ ] Add sameAs only for links supplied by the user; do not fetch or verify them.
-- [ ] Add areaServed only from explicit user input; no inferred markets or worldwide coverage.
-- [ ] Extend the local structural validator for only the supported output subset.
-- [ ] Add clear Arabic and English validation messages with precise field paths.
-- [ ] Improve llms.txt-style section templates while marking all generated content as a draft.
+- [x] Add supported local output types with explicit input and validation contracts: LocalBusiness, ProfessionalService, Service, ContactPoint, PostalAddress, and OpeningHoursSpecification.
+- [x] Add nested FAQPage only from user-entered questions and answers.
+- [x] Keep sameAs limited to user-supplied links; do not fetch or verify them.
+- [x] Keep areaServed limited to explicit user-supplied markets; no inferred markets or worldwide coverage.
+- [x] Extend the local structural validator for only the supported output subset, including nested address, contact, hours, service and FAQ structures.
+- [x] Add Arabic and English validation messages with precise field paths.
+- [x] Add profile type, address, contact, hours, service and FAQ sections to llms.txt-style drafts; preserve provenance and draft notices.
 
-**Acceptance:** generated examples pass the project's own structural tests and a manually performed external format-validation check. A format check does not imply that entity facts, ownership or external links have been verified. No external service is called by the product.
+**Acceptance status:** project-local structural tests pass for the implemented subset. A separate manual Schema.org format review remains pending; it must not be added as a runtime dependency or confused with factual verification. No external service is called by the product.
 
 ## Stage 3 — local reports and exports
 
