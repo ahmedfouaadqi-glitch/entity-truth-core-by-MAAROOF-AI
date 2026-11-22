@@ -7,6 +7,7 @@ export * from "./scanner.js";
 export * from "./pack-generator.js";
 export * from "./validator.js";
 export * from "./report-generator.js";
+export * from "./csv-batch.js";
 
 function resolveLanguage(language: SupportedLang | undefined): SupportedLang {
   const resolved = language ?? "en";
