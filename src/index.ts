@@ -6,6 +6,7 @@ export * from "./types.js";
 export * from "./scanner.js";
 export * from "./pack-generator.js";
 export * from "./validator.js";
+export * from "./report-generator.js";
 
 function resolveLanguage(language: SupportedLang | undefined): SupportedLang {
   const resolved = language ?? "en";
