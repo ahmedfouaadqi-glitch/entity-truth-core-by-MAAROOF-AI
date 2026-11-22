@@ -157,6 +157,7 @@ async function main(){
       input=mergeCliFields({name,headText:text,description,url,lang,window,markets,aliases,officialProfiles:profiles,facts},cliFields);
     }
     const result=auditEntity(input);
+    if(reportFormat&&!outDir)throw new Error("--report requires --out-dir.");
     if(outDir){
       const folder=resolve(outDir);await mkdir(folder,{recursive:true});
       const outputs:[string,string][]=[["audit-report.json",JSON.stringify(result,null,2)+"\n"],["organization.jsonld",JSON.stringify(result.machinePack.jsonLd,null,2)+"\n"],["llms.txt",result.machinePack.llmsTxt]];
@@ -174,6 +175,7 @@ async function main(){
       console.log("Name hints: "+result.disambiguation.heuristicRisk);
       console.log("Notice: local heuristic only; no global search, external verification or AI visibility measurement.");
       if(outDir)console.log("Files saved to "+resolve(outDir));
+      if(reportFormat)console.log("Report format: "+reportFormat);
       if(reportFormat)console.log("Report format: "+reportFormat);
     }
   }catch(e){console.error("entity-truth: "+(e instanceof Error?e.message:String(e)));process.exitCode=1;}
