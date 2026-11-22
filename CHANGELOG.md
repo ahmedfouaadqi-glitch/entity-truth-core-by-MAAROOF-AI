@@ -11,6 +11,7 @@
 ## Unreleased — local agent and self-hosting milestone
 
 ### Scope and local scan window
+- Schema.org review: kept `ProfessionalService` as a legacy input only with an explicit deprecation warning; canonicalized opening-hours weekday values to Schema.org DayOfWeek identifiers.
 - Added local JSON-LD drafts for Organization, LocalBusiness, ProfessionalService and Service, with optional PostalAddress, ContactPoint, OpeningHoursSpecification, OfferCatalog / Service and FAQPage structures from user-provided fields only.
 - Expanded the local structural validator with precise field paths and English / Arabic messages; no link reachability, ownership or factual verification is performed.
 - Exposed the same local profile fields through CLI flags / JSON input, MCP tools and the browser playground.
