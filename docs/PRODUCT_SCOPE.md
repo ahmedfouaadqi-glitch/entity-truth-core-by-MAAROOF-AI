@@ -12,7 +12,9 @@ The project is independently usable through its TypeScript core, CLI, local MCP 
 - Candidate pattern extraction from a selectable text window: 100 words (default), 500 words, or all supplied text.
 - Conservative extraction of email, formatted or labelled phone numbers, labelled addresses and labelled service lists from supplied text; these remain unverified text candidates.
 - Arabic, Sorani Kurdish and English normalization and heuristic improvements that do not require external services.
-- Generation of draft Schema.org JSON-LD and llms.txt-style entity profiles from explicit user input.
+- Generation of draft Schema.org `Organization`, `LocalBusiness`, `ProfessionalService` and `Service` profiles from explicit user input.
+- Optional `PostalAddress`, `ContactPoint`, `OpeningHoursSpecification`, `OfferCatalog` / `Service` entries and `FAQPage` content, only when supplied by the user.
+- A limited local validator for the emitted entity and nested-field structures, with English and Arabic error messages.
 - Local structural validation of supported output structures, with clearly stated limitations.
 - Local CLI, local MCP stdio tools, Skills and browser-playground usability.
 - Local report/export formats that describe only the user's input and the tool's own candidate detections.
