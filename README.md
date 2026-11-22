@@ -71,6 +71,14 @@ Or pass a JSON file containing name, optional URL and description, user-supplied
 
 Use `--window 100`, `--window 500`, or `--window full` to choose the scan window. The default is `100`. The same `window` field is accepted in JSON input and by the local MCP `entity_scan` tool. Arabic-Indic and Persian digits, Arabic percent/number separators, diacritics, tatweel and common alef forms are normalized only for local pattern matching; detected values are returned in their supplied form. The output directory contains audit-report.json, organization.jsonld and llms.txt. Existing files are not overwritten unless --force is supplied. Add `--report md`, `--report html`, or `--report both` to also write `entity-report.md` and/or `entity-report.html` in the same user-selected output directory. The reports include the local scan window, candidate patterns, supplied/not-supplied field inventory, warnings, scope limitations and generated drafts. Report headings are localized for Arabic, Sorani Kurdish and English. Use `--force` to replace existing report files. The HTML report is a self-contained offline document; no DOCX or remote report service is provided.
 
+### Local CSV batch input
+
+Process a UTF-8 CSV locally, with independent outputs per row:
+
+    node dist/cli.js --batch-csv ./entities.csv --out-dir ./batch-output --report both
+
+The command writes `batch-summary.json` and a separate folder for each successful row. Invalid rows are reported without stopping valid rows; the CLI returns a non-zero exit code when any row fails. Lists use `|` separators, while `openingHours` and `faqs` cells use JSON arrays. Unknown or duplicate headers are rejected. See [docs/CSV_BATCH.md](docs/CSV_BATCH.md) for the supported columns and exact format. Direct `.xlsx` workbook parsing is not included.
+
 ## MCP server
 
 The local MCP server exposes four tools. `entity_scan` and `entity_profile_generate` accept `schemaType` (`Organization`, `LocalBusiness`, `ProfessionalService`, or `Service`) plus optional `address`, `contactPoints`, `openingHours`, `services`, `faqs` and `serviceType` fields. `entity_profile_validate` accepts those generated structures and a `lang` setting for English or Arabic validation messages.
