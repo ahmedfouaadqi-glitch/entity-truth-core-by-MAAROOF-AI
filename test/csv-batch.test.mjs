@@ -97,3 +97,25 @@ test("CSV batch option requires its own output directory",()=>{
     resolve("dist/cli.js"),"--batch-csv","entities.csv"
   ]));
 });
+
+
+test("local CSV batch processes at least 20 entities independently in one run",()=>{
+  const root=mkdtempSync(join(tmpdir(),"entity-truth-csv-20-"));
+  try{
+    const csvPath=join(root,"twenty-entities.csv");
+    const output=join(root,"output");
+    const rows=["name,lang,window",...Array.from({length:20},(_,index)=>"Example Entity "+String(index+1).padStart(2,"0")+",en,100")];
+    writeFileSync(csvPath,rows.join("\n")+"\n");
+    execFileSync(process.execPath,[
+      resolve("dist/cli.js"),"--batch-csv",csvPath,"--out-dir",output,"--json"
+    ],{encoding:"utf8"});
+    const summary=JSON.parse(readFileSync(join(output,"batch-summary.json"),"utf8"));
+    assert.equal(summary.totalRows,20);
+    assert.equal(summary.processedRows,20);
+    assert.equal(summary.failedRows,0);
+    assert.equal(summary.rows.length,20);
+    assert.equal(new Set(summary.rows.map(row=>row.outputDirectory)).size,20);
+  }finally{
+    rmSync(root,{recursive:true,force:true});
+  }
+});
