@@ -8,6 +8,7 @@ const runtimeFiles = [
   "src/pack-generator.ts",
   "src/validator.ts",
   "src/report-generator.ts",
+  "src/csv-batch.ts",
   "src/cli.ts",
   "src/mcp/server.ts",
   "src/mcp/tools.ts",
