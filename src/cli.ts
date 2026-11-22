@@ -13,7 +13,7 @@ Options:
   --url <url>        Official website URL (not fetched)
   --description <x>  Entity description
   --lang <ar|ku|en>  Output language (default: en)
-  --type <type>      Organization | LocalBusiness | ProfessionalService | Service
+  --type <type>      Organization | LocalBusiness | Service (ProfessionalService deprecated)
   --window <100|500|full>
                      Local text scan window (default: 100 lexical words)
   --market <name>    Served market; repeatable
