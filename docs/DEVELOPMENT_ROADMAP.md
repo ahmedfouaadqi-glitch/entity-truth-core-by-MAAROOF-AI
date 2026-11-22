@@ -90,10 +90,10 @@ No verify mode, website fetching, crawling, HTTP reachability checks, source com
 ## Stage 5 — community and sustainability
 
 - [ ] Keep Arabic and English documentation current; add Sorani guidance where practical.
-- [ ] Maintain semantic versioning and a complete changelog.
-- [ ] Add dependency update automation and review security advisories.
-- [ ] Maintain Codex / Claude Code / MCP integration regression tests.
-- [ ] Review privacy, runtime dependency and product-scope guardrails in every release.
+- [x] Document the SemVer release contract, changelog discipline, CI gate, protected tag and owner-controlled publication process in `docs/RELEASE_PROCESS.md` and `CHANGELOG.md`.
+- [x] Add weekly Dependabot version-update configuration for npm and GitHub Actions, plus a security disclosure policy. Repository settings for Dependabot alerts/security updates and private vulnerability reporting still require owner verification.
+- [x] Maintain Codex / Claude Code byte-identity checks and MCP stdio integration regression tests in CI.
+- [x] Run the local-only runtime and product-scope guard tests as part of CI and include them in the release checklist.
 - [ ] Keep deployment user-owned; do not introduce centralized data collection or hosting dependencies.
 
 ## Success measures
