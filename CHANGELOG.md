@@ -11,6 +11,9 @@
 ## Unreleased — local agent and self-hosting milestone
 
 ### Scope and local scan window
+- Added local Markdown and self-contained HTML preparation reports, localized for Arabic, Sorani Kurdish and English, including scan metadata, original candidate values, field inventory, warnings, limitations and generated drafts.
+- Added CLI `--report md|html|both` export and browser report-download controls; exports stay in the user-selected local folder or browser download flow.
+- Escaped user-supplied values in HTML reports and tested malformed markup, RTL direction, code-fence collisions, overwrite protection and missing output-directory handling.
 - Schema.org review: kept `ProfessionalService` as a legacy input only with an explicit deprecation warning; canonicalized opening-hours weekday values to Schema.org DayOfWeek identifiers.
 - Added local JSON-LD drafts for Organization, LocalBusiness, ProfessionalService and Service, with optional PostalAddress, ContactPoint, OpeningHoursSpecification, OfferCatalog / Service and FAQPage structures from user-provided fields only.
 - Expanded the local structural validator with precise field paths and English / Arabic messages; no link reachability, ownership or factual verification is performed.
