@@ -81,9 +81,12 @@ test("local CSV batch processes valid rows even when another row fails",()=>{
     assert.throws(()=>execFileSync(process.execPath,[
       resolve("dist/cli.js"),"--batch-csv",csvPath,"--out-dir",output
     ]));
-    execFileSync(process.execPath,[
+    assert.throws(()=>execFileSync(process.execPath,[
       resolve("dist/cli.js"),"--batch-csv",csvPath,"--out-dir",output,"--force"
-    ]);
+    ]));
+    const rerunSummary=JSON.parse(readFileSync(summaryPath,"utf8"));
+    assert.equal(rerunSummary.processedRows,2);
+    assert.equal(rerunSummary.failedRows,1);
   }finally{
     rmSync(root,{recursive:true,force:true});
   }
