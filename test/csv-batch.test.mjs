@@ -35,7 +35,7 @@ test("CSV parser maps supported business fields and pipe-separated lists",()=>{
 });
 
 test("invalid CSV rows are reported independently and valid rows remain available",()=>{
-  const parsed=parseEntityCsv("name,lang,window\nValid One,en,100\nMissing Name,ar,500\nInvalid Language,fr,100\nInvalid Window,en,250\n");
+  const parsed=parseEntityCsv("name,lang,window\nValid One,en,100\n,ar,500\nInvalid Language,fr,100\nInvalid Window,en,250\n");
   assert.equal(parsed.rows.length,4);
   assert.ok(parsed.rows[0].input);
   assert.match(parsed.rows[1].error,/name is required/);
@@ -59,7 +59,7 @@ test("local CSV batch processes valid rows even when another row fails",()=>{
   try{
     const csvPath=join(root,"entities.csv");
     const output=join(root,"output");
-    writeFileSync(csvPath,'name,schemaType,lang,headText,description\nAlpha Clinic,LocalBusiness,en,"Founded in 2024","Local clinic"\nBroken Entity,fr,ar,"Text","Bad language"\nBeta Studio,Organization,ar,"تأسست عام ٢٠٢٠","استوديو"\n');
+    writeFileSync(csvPath,'name,schemaType,lang,headText,description\nAlpha Clinic,LocalBusiness,en,"Founded in 2024","Local clinic"\nBroken Entity,Organization,fr,"Text","Bad language"\nBeta Studio,Organization,ar,"تأسست عام ٢٠٢٠","استوديو"\n');
     assert.throws(()=>execFileSync(process.execPath,[
       resolve("dist/cli.js"),"--batch-csv",csvPath,"--out-dir",output,"--report","both","--json"
     ],{encoding:"utf8"}));
