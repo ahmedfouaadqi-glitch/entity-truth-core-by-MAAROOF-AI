@@ -1,10 +1,47 @@
 export type SupportedLang = "ar" | "ku" | "en";
 export type AnalysisWindow = 100 | 500 | "full";
 export type HeuristicRisk = "low" | "medium" | "high" | "unknown";
+export type EntitySchemaType = "Organization" | "LocalBusiness" | "ProfessionalService" | "Service";
+
+export interface PostalAddressInput {
+  streetAddress?: string;
+  addressLocality?: string;
+  addressRegion?: string;
+  postalCode?: string;
+  addressCountry?: string;
+}
+
+export interface ContactPointInput {
+  contactType?: string;
+  telephone?: string;
+  email?: string;
+  availableLanguage?: string[];
+}
+
+export interface OpeningHoursSpecificationInput {
+  dayOfWeek: string[];
+  opens: string;
+  closes: string;
+  validFrom?: string;
+  validThrough?: string;
+}
+
+export interface ServiceInput {
+  name: string;
+  description?: string;
+  serviceType?: string;
+}
+
+export interface FAQItemInput {
+  question: string;
+  answer: string;
+}
 
 export interface EntityInput {
   /** Canonical entity or brand name supplied by the user. */
   name: string;
+  /** Primary Schema.org type; defaults to Organization. */
+  schemaType?: EntitySchemaType;
   /** Official website URL supplied by the user. It is not fetched by this package. */
   url?: string;
   /** Short description supplied by the user. */
@@ -23,6 +60,18 @@ export interface EntityInput {
   officialProfiles?: string[];
   /** Facts supplied by the user. They are never labelled independently verified. */
   facts?: string[];
+  /** Explicitly supplied postal address fields; never geocoded or checked. */
+  address?: PostalAddressInput;
+  /** Explicitly supplied contact channels; not tested for reachability or ownership. */
+  contactPoints?: ContactPointInput[];
+  /** Explicitly supplied local opening-hours records. */
+  openingHours?: OpeningHoursSpecificationInput[];
+  /** Explicitly supplied service names and descriptions. */
+  services?: ServiceInput[];
+  /** Optional FAQ content written by the user. */
+  faqs?: FAQItemInput[];
+  /** Used as the serviceType of a primary Service entity. */
+  serviceType?: string;
   lang?: SupportedLang;
 }
 
