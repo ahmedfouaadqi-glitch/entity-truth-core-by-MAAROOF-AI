@@ -32,7 +32,7 @@ Please do not publish suspected vulnerabilities, exploit details, credentials, p
 1. If GitHub's **Report a vulnerability** option is visible in the repository's Security tab, use that private reporting path and include the affected commit, impact, and minimal reproduction details.
 2. If the private reporting option is not available, contact the repository owner privately through GitHub before sharing sensitive technical details. Do not place the details in a public issue.
 
-Private vulnerability reporting is a repository setting. The presence of this file does not mean that the setting has been enabled. The repository owner must enable it in **Settings → Security → Code security and analysis → Private vulnerability reporting**, where available, and verify that the reporting option is visible.
+Private vulnerability reporting is a repository setting. The presence of this file does not mean that the setting has been enabled. The repository owner must enable it under **Repository Settings → Security and quality → Advanced Security → Private vulnerability reporting**, where available, and verify that the **Report a vulnerability** option appears under the repository's Advisories section.
 
 ## Scope
 
