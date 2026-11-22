@@ -75,7 +75,8 @@ This roadmap supersedes the earlier proposal to implement an optional external-v
 - [x] Add local Markdown and HTML reports, with Arabic, Sorani Kurdish and English headings, RTL HTML direction, escaped user content and offline assets only.
 - [ ] Consider DOCX export only after the output schema and RTL rendering requirements are stable.
 - [x] Include the selected scan window, candidate patterns, supplied/not-supplied field inventory, warnings, scope limitations and generated draft JSON-LD / llms.txt content.
-- [ ] Add local CSV / Excel batch input only if each row is processed independently with no network calls.
+- [x] Add local CSV batch input with independent row processing, separate output directories, row-level errors and no network calls; document the supported column contract.
+- [ ] Add direct XLSX / Excel workbook parsing; deferred to avoid introducing a spreadsheet dependency without a separate dependency and file-size review.
 - [ ] Allow report branding (logo, colors and provider details) without embedding a research or strategy engine.
 
 **Hard limit:** reports may describe only user-supplied information and local tool output. Do not add competitor findings, market intelligence, source verification, visibility scores or strategy recommendations.
