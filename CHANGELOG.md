@@ -11,6 +11,8 @@
 ## Unreleased — local agent and self-hosting milestone
 
 ### Scope and local scan window
+- Added weekly Dependabot version-update configuration for npm and GitHub Actions; it becomes active only after the config reaches the default branch.
+- Expanded `SECURITY.md` with responsible disclosure guidance and added a SemVer release process with explicit CI, protected-tag and owner-publication gates.
 - Added a dependency-free local CSV batch parser and CLI workflow. Each row is processed independently, valid rows complete even when other rows fail, and `batch-summary.json` records row-level outcomes.
 - Added explicit CSV header aliases, pipe-separated list fields, JSON-array parsing for opening hours and FAQs, strict unknown/duplicate-header handling, and a CSV input contract guide. Direct XLSX parsing remains deferred.
 - Added local Markdown and self-contained HTML preparation reports, localized for Arabic, Sorani Kurdish and English, including scan metadata, original candidate values, field inventory, warnings, limitations and generated drafts.
