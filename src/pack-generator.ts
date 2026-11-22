@@ -47,9 +47,15 @@ function cleanContactPoints(input:EntityInput["contactPoints"]):Record<string,un
 }
 function cleanOpeningHours(input:EntityInput["openingHours"]):Record<string,unknown>[] {
   if(!Array.isArray(input)) return [];
+  const dayNames=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
   return input.map((item)=>{
     const result:Record<string,unknown>={"@type":"OpeningHoursSpecification"};
-    const days=clean(item?.dayOfWeek),opens=text(item?.opens),closes=text(item?.closes);
+    const days=clean(item?.dayOfWeek).map(day=>{
+      const short=day.replace(/^https?:\\/\\/schema\\.org\\//i,"");
+      const canonical=dayNames.find(name=>name.toLowerCase()===short.toLowerCase());
+      return canonical?"https://schema.org/"+canonical:day;
+    });
+    const opens=text(item?.opens),closes=text(item?.closes);
     const validFrom=text(item?.validFrom),validThrough=text(item?.validThrough);
     if(days.length)result.dayOfWeek=days;
     if(opens)result.opens=opens;
@@ -102,6 +108,7 @@ export function generateMachinePack(input:EntityInput):MachinePack {
 
   if(!url&&input.url?.trim()) warnings.push("Website URL was not included in JSON-LD.");
   if(profiles.length) warnings.push("Profile links are user supplied; ownership is not independently verified.");
+  if(schemaType==="ProfessionalService")warnings.push("ProfessionalService is deprecated in Schema.org. Consider LocalBusiness for a local provider or Service for a service description.");
   if(facts.length) warnings.push("Facts are user supplied and are not independently verified.");
   if(!markets.length) warnings.push("No served markets were supplied; Worldwide coverage is not assumed.");
   if(!languages.length) warnings.push("No entity languages were supplied; the tool's interface languages are not assigned to the entity.");
