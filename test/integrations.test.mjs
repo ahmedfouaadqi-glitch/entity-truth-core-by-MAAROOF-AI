@@ -296,3 +296,14 @@ test("CLI emits a deprecation warning for legacy ProfessionalService type",()=>{
   const result=JSON.parse(out);
   assert.ok(result.machinePack.warnings.some(item=>/ProfessionalService is deprecated in Schema\.org/i.test(item)));
 });
+
+
+test("browser playground exposes local Markdown and HTML report downloads",async()=>{
+  const html=await readFile(new URL("../playground/index.html",import.meta.url),"utf8");
+  assert.match(html,/import\s*\{\s*auditEntity,\s*generateEntityReports\s*\}/);
+  assert.match(html,/id="dlMarkdown"/);
+  assert.match(html,/id="dlHtml"/);
+  assert.match(html,/download\("entity-report\.md",\s*reports\.markdown/);
+  assert.match(html,/download\("entity-report\.html",\s*reports\.html/);
+  assert.match(html,/dlMarkdown:"Download Markdown report"|dlMarkdown:"تنزيل تقرير Markdown"/);
+});
