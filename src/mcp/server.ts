@@ -98,7 +98,7 @@ export function createEntityTruthMcpServer() {
   server.registerTool(
     "entity_scan",
     {
-      description: "Run the complete local Entity Truth Core audit with selectable 100, 500, or full text scanning, a limited name hint, and a draft Schema.org profile. Supported primary types: Organization, LocalBusiness, ProfessionalService, Service. Nested contact, address, hours, services and FAQ fields must be user supplied. No network calls or independent verification.",
+      description: "Run the complete local Entity Truth Core audit with selectable 100, 500, or full text scanning, a limited name hint, and a draft Schema.org profile. Primary types: Organization, LocalBusiness, or Service. Legacy ProfessionalService is accepted with a deprecation warning. Nested contact, address, hours, services and FAQ fields must be user supplied. No network calls or independent verification.",
       inputSchema: entityInputSchema,
     },
     async (input) => safelyRun(() => executeEntityScan(toEntityInput(input))),
@@ -122,7 +122,7 @@ export function createEntityTruthMcpServer() {
   server.registerTool(
     "entity_profile_generate",
     {
-      description: "Generate draft Organization, LocalBusiness, ProfessionalService or Service JSON-LD plus an llms.txt-style profile from user-supplied fields only. Contact, address, hours, services, FAQs, facts, markets and links are not independently verified.",
+      description: "Generate draft Organization, LocalBusiness or Service JSON-LD plus an llms.txt-style profile from user-supplied fields only. Legacy ProfessionalService is accepted with a deprecation warning. Contact, address, hours, services, FAQs, facts, markets and links are not independently verified.",
       inputSchema: entityInputSchema,
     },
     async (input) => safelyRun(() => executeEntityProfileGenerate(toEntityInput(input))),
