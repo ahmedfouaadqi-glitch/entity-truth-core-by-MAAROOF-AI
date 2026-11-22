@@ -11,6 +11,8 @@
 ## Unreleased — local agent and self-hosting milestone
 
 ### Scope and local scan window
+- Added a dependency-free local CSV batch parser and CLI workflow. Each row is processed independently, valid rows complete even when other rows fail, and `batch-summary.json` records row-level outcomes.
+- Added explicit CSV header aliases, pipe-separated list fields, JSON-array parsing for opening hours and FAQs, strict unknown/duplicate-header handling, and a CSV input contract guide. Direct XLSX parsing remains deferred.
 - Added local Markdown and self-contained HTML preparation reports, localized for Arabic, Sorani Kurdish and English, including scan metadata, original candidate values, field inventory, warnings, limitations and generated drafts.
 - Added CLI `--report md|html|both` export and browser report-download controls; exports stay in the user-selected local folder or browser download flow.
 - Escaped user-supplied values in HTML reports and tested malformed markup, RTL direction, code-fence collisions, overwrite protection and missing output-directory handling.
