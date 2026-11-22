@@ -72,9 +72,9 @@ This roadmap supersedes the earlier proposal to implement an optional external-v
 
 **Goal:** package the tool's own preparation output for handoff.
 
-- [ ] Add local Markdown and HTML reports.
+- [x] Add local Markdown and HTML reports, with Arabic, Sorani Kurdish and English headings, RTL HTML direction, escaped user content and offline assets only.
 - [ ] Consider DOCX export only after the output schema and RTL rendering requirements are stable.
-- [ ] Show selected scan window, candidate patterns, missing user-supplied fields, warnings and generated draft files.
+- [x] Include the selected scan window, candidate patterns, supplied/not-supplied field inventory, warnings, scope limitations and generated draft JSON-LD / llms.txt content.
 - [ ] Add local CSV / Excel batch input only if each row is processed independently with no network calls.
 - [ ] Allow report branding (logo, colors and provider details) without embedding a research or strategy engine.
 
