@@ -104,7 +104,8 @@ async function main(){
       else if(a==="--text"){[text,i]=value(args,i,a);}
       else if(a==="--description"){[description,i]=value(args,i,a);}
       else if(a==="--url"){[url,i]=value(args,i,a);}
-      else if(a==="--out-dir"){[outDir,i]=value(args,i,a);}\n      else if(a==="--report"){const v=value(args,i,a);i=v[1];if(!["md","html","both"].includes(v[0]))throw new Error("Report format must be md, html, or both.");reportFormat=v[0] as "md"|"html"|"both";}
+      else if(a==="--out-dir"){[outDir,i]=value(args,i,a);}
+      else if(a==="--report"){const v=value(args,i,a);i=v[1];if(!["md","html","both"].includes(v[0]))throw new Error("Report format must be md, html, or both.");reportFormat=v[0] as "md"|"html"|"both";}
       else if(a==="--lang"){const v=value(args,i,a);i=v[1];if(!["ar","ku","en"].includes(v[0]))throw new Error("Language must be ar, ku or en.");lang=v[0] as SupportedLang;langSpecified=true;}
       else if(a==="--type"){const v=value(args,i,a);i=v[1];schemaType=parseSchemaType(v[0]);}
       else if(a==="--window"){const v=value(args,i,a);i=v[1];window=parseWindow(v[0]);windowSpecified=true;}
