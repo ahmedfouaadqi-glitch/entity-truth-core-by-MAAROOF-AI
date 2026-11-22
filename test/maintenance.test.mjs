@@ -33,3 +33,11 @@ test("ownership documentation does not claim security settings are already enabl
   assert.match(ownership,/Private vulnerability reporting enabled and verified/);
   assert.match(ownership,/Dependabot weekly version updates observed after/);
 });
+
+
+test("Sorani quickstart documents local use and the no-network boundary",async()=>{
+  const guide=await readFile(new URL("../docs/QUICKSTART.ku.md",import.meta.url),"utf8");
+  assert.match(guide,/ئامرازێکی سەربەخۆ و ناوخۆییە/);
+  assert.match(guide,/--batch-csv/);
+  assert.match(guide,/هیچ وێبسایتێک ناگەڕێت/);
+});
