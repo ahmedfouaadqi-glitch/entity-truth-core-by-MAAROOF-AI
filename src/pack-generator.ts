@@ -51,7 +51,7 @@ function cleanOpeningHours(input:EntityInput["openingHours"]):Record<string,unkn
   return input.map((item)=>{
     const result:Record<string,unknown>={"@type":"OpeningHoursSpecification"};
     const days=clean(item?.dayOfWeek).map(day=>{
-      const short=day.replace(/^https?:\\/\\/schema\\.org\\//i,"");
+      const short=day.replace(/^https?:\/\/schema\.org\//i,"");
       const canonical=dayNames.find(name=>name.toLowerCase()===short.toLowerCase());
       return canonical?"https://schema.org/"+canonical:day;
     });
