@@ -82,7 +82,7 @@ function windowLabel(result:EntityAuditResult,t:ReportCopy):string {
   return window==="full"?t.fullText:t.firstWords.replace("{count}",String(window));
 }
 function markdownEscape(value:string):string {
-  return value.replaceAll("\\","\\\\").replaceAll("|","\\|").replaceAll("\r\n","<br>").replaceAll("\n","<br>").replaceAll("<","&lt;");
+  return value.replaceAll("\\","\\\\").replaceAll("|","\\|").replaceAll("<","&lt;").replaceAll("\r\n","<br>").replaceAll("\n","<br>");
 }
 function fenceFor(value:string):string {
   const tick=String.fromCharCode(96);
