@@ -11,6 +11,8 @@
 ## Unreleased — local agent and self-hosting milestone
 
 ### Scope and local scan window
+- Added a Sorani Kurdish quickstart for local CLI, reports and CSV batch usage.
+- Added a regression test proving 20 CSV entity rows can be processed independently in one local batch.
 - Added weekly Dependabot version-update configuration for npm and GitHub Actions; it becomes active only after the config reaches the default branch.
 - Expanded `SECURITY.md` with responsible disclosure guidance and added a SemVer release process with explicit CI, protected-tag and owner-publication gates.
 - Added a dependency-free local CSV batch parser and CLI workflow. Each row is processed independently, valid rows complete even when other rows fail, and `batch-summary.json` records row-level outcomes.
